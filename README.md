@@ -66,6 +66,16 @@ We also provided a script that adds some data to the database (accounts, users, 
 npm run populate
 ```
 
+Once you do, you will get 4 users to login with: 
+- user1@test.com
+- user2@test.com
+- user3@test.com
+- user4@test.com
+
+all with password: 'testtest'
+
+If you do not see a lot on the feed yet of the user you logged in with, search for another user (type in a letter such as 'b' or 'a') and click the + sign to follow him/her.
+
 ### Setup cloudinary. 
 
 We use [Cloudinary](https://cloudinary.com/) to allow users to upload media, automatically optimise and serve this media which will be linked to the data of our application such as video and images. It's truly quite amazing what Cloudinary does behind the scenes. To see this feature in action, create an account with Cloudinary and add your cloudname and a public template (there is a default template called ‘ml_default’ which you can make public) to the environment. 
