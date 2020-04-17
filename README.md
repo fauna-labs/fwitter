@@ -48,16 +48,15 @@ REACT_APP_LOCAL___BOOTSTRAP_FAUNADB_KEY=<insert faunadb bootstrap key>
 ```
 
 ### Populate the database (optional)
-We also provided a script that adds some data to the database (accounts, users, fweets, comments, likes, etc..) for you to play around with. 
+We also provided a script that adds some data to the database (accounts, users, fweets, comments, likes, etc..) for you to play around with, it will use or ask the same admin key.
+
 ```
-// with almost no permissions that you need to place in your .env.local as the
-// script suggestions
 npm run populate
 ```
 
 ### Setup cloudinary. 
 
-We use [Cloudinary](https://cloudinary.com/) to allow users to upload media which will be linked to the data of our application such as video and images. Currently, this is only used when a user creates a new Fweet with the media button on the right. To see this feature in action, create an account with Cloudinary and add your cloudname and a public template (there is a default template called ‘ml_default’ which you can make public) to the environment. 
+We use [Cloudinary](https://cloudinary.com/) to allow users to upload media, automatically optimise and serve this media which will be linked to the data of our application such as video and images. Currently, this is only used when a user creates a new Fweet with the media button on the right. To see this feature in action, create an account with Cloudinary and add your cloudname and a public template (there is a default template called ‘ml_default’ which you can make public) to the environment. 
 ```
 REACT_APP_LOCAL___CLOUDINARY_CLOUDNAME=<cloudinary cloudname>
 REACT_APP_LOCAL___CLOUDINARY_TEMPLATE=<cloudinary template>
