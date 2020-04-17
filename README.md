@@ -32,7 +32,7 @@ Once you are in the dashboard, click on New Database, fill in a name, and click 
 You should now be on the "Overview" page of your new database. 
 Next, to manipulate the database from within our setup scripts, we need a key. Click on the Security tab in the left sidebar, then click the New key button. 
 
-<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/admin_key.png?raw=true" width="600">
+<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/admin_key1.png?raw=true" width="600">
 
 In the "New key" form, the current database should already be selected. For "Role", leave it as "Admin" and give it a name.
 
