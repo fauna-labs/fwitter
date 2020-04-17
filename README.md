@@ -1,10 +1,10 @@
 This project is an example of how to a 'real-world' app with highly dynamic data in a serverless fashion using React hooks, FaunaDB, and Cloudinary. It uses the Fauna Query Language (FQL) and starts with a frontend-only approach that directly accesses the serverless database FaunaDB for data storage, authentication, and authorization. 
 
-![Current Services](https://github.com/fauna-brecht/fwitter/blob/master/readme/stack1.png?raw=true=400x)
+![Current Services](https://github.com/fauna-brecht/fwitter/blob/master/readme/stack1.png?raw=true | width=400)
 
 A few features are still missing and will be covered in future articles, including streaming, pagination, benchmarks, and a more advanced security model with short-lived tokens, JWT tokens, single sign-on (possibly using a service like Auth0), IP-based rate limiting (with Cloudflare workers), e-mail verification (with a service like SendGrid), and HttpOnly cookies.
 
-![Future Services](https://github.com/fauna-brecht/fwitter/blob/master/readme/stack2.png?raw=true=400x)
+![Future Services](https://github.com/fauna-brecht/fwitter/blob/master/readme/stack2.png?raw=true | width=400)
 
 
 ## Setup the project
