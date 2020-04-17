@@ -16,19 +16,22 @@ This app was created with Create React App, to start using it we need to:
 ### Setup the database
 
 To set up the project, go to the [FaunaDB Dashboard](https://https://dashboard.fauna.com/) and sign up. 
-![Sign up](link-to-image)
+
+<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/sign_up.png?raw=true" width="600">
 
 Once you are in the dashboard, click on New Database, fill in a name, and click Save. 
-![New database](link-to-image)
+<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/new_database.png?raw=true" width="600">
+<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/new_database2.png?raw=true" width="600">
 
 You should now be on the "Overview" page of your new database. 
-![Setup database](link-to-image)
-
 Next, to manipulate the database from within our setup scripts, we need a key. Click on the Security tab in the left sidebar, then click the New key button. 
-![Admin key](link-to-image)
+<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/admin_key.png?raw=true" width="600">
 
-In the "New key" form, the current database should already be selected. For "Role", leave it as "Admin" and give it a name. Next, click Save and copy the key secret displayed on the next page. It will not be displayed again.
-![Admin key](link-to-image)
+In the "New key" form, the current database should already be selected. For "Role", leave it as "Admin" and give it a name.
+<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/admin_key2.png?raw=true" width="600">
+Next, click Save and copy the key secret displayed on the next page. It will not be displayed again.
+<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/admin_key3.png?raw=true" width="600">
+
 
 You now have the option to place it in your environment variables via .env.local, we have provided an example file .env.local.example that you can rename. Although the .env.local file is gitignored, make sure not to push your admin key, this key is powerful and meant to stay private. The setup scripts will therefore also ask you the key if you did not place it in your environment vars so you could opt to paste them in then instead.
 
