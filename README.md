@@ -36,7 +36,7 @@ Next, click Save and copy the key secret displayed on the next page. It will not
 You now have the option to place it in your environment variables via .env.local, we have provided an example file .env.local.example that you can rename. Although the .env.local file is gitignored, make sure not to push your admin key, this key is powerful and meant to stay private. The setup scripts will therefore also ask you the key if you did not place it in your environment vars so you could opt to paste them in then instead.
 
 ```
-REACT_APP_LOCAL___ADMIN=fnADpZWKPWACCyDrAWqjJrIqkwBaaDPBst4Zrn1Z
+REACT_APP_LOCAL___ADMIN=<insert your admin key>
 ```
 
 We have prepared a few scripts so that you only have to run the following commands to initialize your app, create all collections, and populate your database. The scripts will ask for the admin token that you have created and will give you further instructions.  
