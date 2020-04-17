@@ -1,0 +1,26 @@
+button {
+    border-radius: $border-radius;
+    border: none;
+    display: inline-block;
+    cursor: pointer;
+    height: $touch-target;
+    color: white;
+    text-decoration: none;
+    background: $bluebright;
+    padding: 0 $grid-unit/1.5;
+    text-transform: uppercase;
+    text-shadow: 0px 1px 0px rgba(0,0,0,0.2);
+}
+
+button:hover {
+    background: $bluebright-hover;
+}
+
+button:active {
+    position: relative;
+    top: 1px;
+}
+
+button:focus {
+    outline: none;
+}

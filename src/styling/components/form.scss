@@ -1,0 +1,54 @@
+.account-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 600px;
+   // color: rgba(255,255,255,0.8);
+}
+
+.account-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    max-width: 600px;
+    height: 400px;
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+}
+
+.account-form button {
+  min-width: 80px; 
+  margin-left: $grid-unit;
+}
+
+.input-row {
+    display: flex;
+    margin: 10px;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.input-row-column {
+    display: flex;
+}
+
+input.input-row-column {
+    width: 80%;
+}
+
+input[type="submit"], input[type="file"], input[type="text"], input[type="password"], input:not([type]), select, textarea {
+    border: 1px solid $soft-border;
+    height: $touch-target;
+    padding: $grid-unit/1.5;
+    border-radius: $border-radius-round;
+    outline: none;
+    font-size: 15px;
+}
+
+.align-right {
+    justify-content: flex-end;
+}

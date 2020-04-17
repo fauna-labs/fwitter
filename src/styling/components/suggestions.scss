@@ -1,0 +1,9 @@
+.suggestions {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 20%;
+  min-width: 20%;
+  border-left: 1px solid rgba(100, 116, 175, 0.2);
+  padding-top: 50px;
+}

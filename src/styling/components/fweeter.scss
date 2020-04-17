@@ -1,0 +1,62 @@
+
+.fweeter {
+  background: $soft-white;
+  border-radius: $border-radius-round;
+  border: 1px solid $soft-border;
+  margin-bottom: $grid-unit;
+}
+
+.fweeter .fweet-card {
+  background: none;
+  flex-direction: row;
+  margin: 0;
+  padding: $grid-unit $grid-unit 0 $grid-unit;
+  border: 0px solid $soft-border
+
+}
+
+
+.fweeter .fweet-input-field {
+  width: 100%;
+  border: 0px;
+  font-size: 20px;
+  padding: $grid-unit/2 0 $grid-unit/2 $grid-unit/2;
+}
+
+.fweeter .fweet-card-text-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.fweeter .fweet-card-actions {
+  justify-content: flex-end;
+  padding: $grid-unit/2 $grid-unit $grid-unit 0;
+}
+
+.fweeter .fweet-card-actions .icon {
+  margin-left: 5px;
+  font-size: 25px;
+}
+
+.fweeter .fweet-card-actions button.icon {
+  color: $hard-white;
+  margin: 0;
+  font-size: 15px;
+  border-radius: 100%;
+  background: $fauna-cta;
+}
+
+.fweeter .fweet-card-actions button.icon:hover {
+  background: $fauna-cta-hover;
+}
+
+.fweeter svg {
+  cursor: pointer;
+}
+
+.fweeter .fweet-asset {
+  margin-left: $grid-unit * 3;
+  margin-top: $grid-unit;
+  width: calc(100% - 4 *  #{$grid-unit});
+}

@@ -1,0 +1,33 @@
+.fweets {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    width: 100%;
+    min-height: 500px;
+}
+
+.no-results-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    text-align: center;
+}
+
+.no-results-image {
+    height: 200px;
+    margin-top: 50px;
+}
+
+.no-results-text {
+    font-size: 50px;
+    font-weight: 100;
+}
+
+.no-results-subtext {
+    font-size: 30px;
+    font-weight: 100;
+}
+

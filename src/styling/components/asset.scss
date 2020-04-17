@@ -1,0 +1,21 @@
+.fweet-asset {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+
+.fweet-asset img {
+  background-color: white;
+  margin: 0 0 $grid-unit/1.5 0;
+  max-height: 400px;
+  max-width: 100%;
+
+}
+
+.fweet-asset video {
+  border-radius: $border-radius-round;
+  max-height: 400px;
+  max-width: 100%;
+}

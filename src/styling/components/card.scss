@@ -1,0 +1,224 @@
+.fweet-card-container {
+    padding: $grid-unit/2 0;
+    
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    border-radius: 10px;
+    justify-content: flex-start;
+}
+
+.fweet-card {
+    border-radius: $border-radius-round;
+    display: flex;
+    flex-direction: row;
+    background: $soft-white;
+    padding: $grid-unit/2 $grid-unit $grid-unit/4 $grid-unit;
+    border: 1px solid $soft-border
+}
+
+.fweet-card-main {
+    display: flex;
+    flex-direction: column;
+    padding: 0 $grid-unit/2;
+    width: calc(100% - #{$grid-unit});
+}
+
+.fweet-card .icon-text { 
+    display: flex;
+    font-weight: normal;
+    justify-self: center;
+    align-items: center;
+    margin-left: 5px;
+}
+
+.avatar {
+    flex: 0 0 auto;
+    background: $soft-shade;
+    display: flex;
+    width: $grid-unit*2;
+    height: $grid-unit*2;
+    z-index: 10;
+    border-radius:100%;
+    justify-content: center;
+    justify-self: center;
+    align-items: center;    
+}
+
+.fweet-card-main .avatar {
+    height: 0;
+    right: $grid-unit*2.5;
+    top: 30px;
+}
+
+
+.avatar img {
+    clip-path: circle( $grid-unit at center);
+    width: 100%;
+}
+
+.fweet-card-actions {
+    display: flex;
+    justify-content: flex-start;
+    flex: 1 1 auto;
+    align-items: center;
+}
+
+.fweet-card-actions .icon {
+    display: flex;
+    font-size: 1rem;
+    justify-content:center;
+    align-items: center;
+    height: $touch-target;
+    width: $touch-target;
+    margin: 0 $grid-unit 0 $grid-unit/2;
+    cursor: pointer;
+}
+
+.fweet-card-actions .icon {
+    color: $grey;
+    margin: 0;
+    margin-right: 30px;
+}
+
+.fweet-card-actions .icon:hover {
+    color: $dark-grey;
+}
+
+.fweet-card .highlight-like { 
+    color: $lovered;
+}
+
+.fweet-card .highlight-refweet { 
+    color: $fauna-cta;
+}
+
+.fweet-card .highlight-comment {
+    color:  $wisteria;
+}
+
+.fweet-card-actions .icon .highlight-like:hover {
+    color: rgb(202, 54, 71);
+}
+
+.fweet-card-actions .icon .highlight-refweet:hover {
+    color: $maya-blue;
+}
+
+.fweet-card-actions .icon .highlight-comment:hover {
+    color:  $wisteria-hover;
+}
+
+.fweet-header {
+    display: flex;
+    font-size:0.75rem;
+    margin-bottom: 5px;
+}
+
+.refweet-header {
+    font-size:0.75rem;
+    color: $rock-blue;
+}
+.refweet-header svg {
+    margin-right: 5px;
+}
+
+
+.fweet-header .fweet-name {
+    display: flex;
+    font-weight: 500;
+    word-wrap: none;
+    padding-right: 5px;
+}
+
+.fweet-header .fweet-handle {
+    display: flex;
+    font-weight: light;
+   // color: rgba(255,255,255,0.3);
+    flex: 1 1 auto;
+}
+
+.fweet-card-text {
+    display: block;
+    flex-direction: column;
+    justify-content: center;
+    padding: $grid-unit/2 0;
+}
+
+.fweet-card-text.refweet {
+    padding: $grid-unit / 2;
+    background-color: $soft-shade;
+}
+
+.fweet-comments {
+    margin-left: $grid-unit;
+}
+
+.fweet-card-text.comment {
+    padding: 0 $grid-unit/2;
+    margin: $grid-unit/2 0 $grid-unit $grid-unit;
+    border-left: 2px solid $wisteria;
+    background: $soft-white;
+    border-radius: $border-radius-round;
+    border: 1px solid $soft-border;
+    padding: $grid-unit;
+    width: 100%;
+}
+
+.fweet-card-text.comment:first-child {
+    margin-top: $grid-unit/2; 
+}
+
+.fweet-card-text.comment:last-child {
+    margin-bottom: $grid-unit/2; 
+}
+
+.fweet-description {
+    display: flex;
+    margin: 0px;
+}
+
+.fweet-languages {
+    display: flex;
+    margin: 0px;
+}
+
+.comment-container {
+    display: flex;
+    position: relative;
+    border-left: 1px solid $soft-line;
+}
+
+.comment-container:last-child::after  {
+    content: "";
+    position: absolute;
+    background-color: $solitude;
+    color: red;
+    font-weight: bold;
+    top: calc(50% + 1px);
+    height: 50%;
+    left: -1px;
+    width: 2px;
+}
+
+.fweet-comment-bullet {
+    display: flex;
+    position: absolute;
+    flex: 0 0 auto;
+    top: 50%;
+    left: 0px;
+    min-height: 50%;
+    border-top: 1px solid $soft-line;
+    width: $grid-unit;
+}
+
+.fweet-comment-edit {
+    display: flex;
+    flex: 1 1 auto;
+}
+
+.fweet-comment-edit .fweet-comment-input-field {
+    display: flex;
+    flex: 1 1 auto;
+    border-radius: $border-radius;
+}

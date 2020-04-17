@@ -1,0 +1,55 @@
+
+// CSS
+* {
+    box-sizing: border-box;
+}
+// Main colors used (https://www.color-blindness.com/color-name-hue/)
+$rhino: #2c3160;
+$chetwode: #6474af;
+$bluenav: #485C80;
+$bluebright: #4080ED;
+$bluebright-hover: rgb(49, 101, 190);
+$solitude: #F3F4F9;
+$soft-white: rgba(255,255,255,0.8);
+$hard-white: rgba(255,255,255,0.95);
+$wisteria: #bc9be0;
+$wisteria-hover: #cea2ff;
+$rock-blue: #9aaec3;
+$maya-blue: #77b4ff;
+$fauna-cta: #00caa3;
+$fauna-cta-hover: #04a98a;
+$soft-border: rgba(0,0,0,0.1);
+$soft-line: rgba(0,0,0,0.14);
+$soft-shade: #F9F9F9;
+$blue-shade: #3A4A66;
+$dark-grey: #4A4A4A;
+$grey: #808080;
+$lovered: #D44D5C;
+// $fauna-cerulean: #323fcb;
+
+// layout
+$grid-unit: 30px;
+$touch-target-min: 36px;
+$touch-target: 44px;
+$border-radius: calc( #{$grid-unit} / 4);
+$border-radius-round: calc( #{$grid-unit} / 1.5);
+
+// fonts
+$menu-font-size: 20px;
+
+@import "./components/button";
+@import "./components/form";
+@import "./components/layout";
+@import "./components/card";
+@import "./components/nav";
+@import "./components/fweeter";
+@import "./components/suggestions";
+@import "./components/search";
+@import "./components/asset";
+
+@import "./pages/home";
+
+// CSS from libraries  
+@import "react-toastify/dist/ReactToastify";
+
+
