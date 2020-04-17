@@ -1,53 +1,85 @@
-This project is an example application that shows how to write a FaunaDB login/logout/register without a backend.
-FaunaDB's security roles are extremely flexible, in combination with User Defined Function we can 
-boostrap the security. 
+This project is an example of how to a 'real-world' app with highly dynamic data in a serverless fashion using React hooks, FaunaDB, and Cloudinary. It uses the Fauna Query Language (FQL) and starts with a frontend-only approach that directly accesses the serverless database FaunaDB for data storage, authentication, and authorization. 
 
-We start off with a token that can only call two User Defined Functions (like stored procedures) functions (register, login).
-Once the user logs in, the token is swapped with a 'login token' which has access to view profiles. 
+![Current Services](link-to-image)
+
+A few features are still missing and will be covered in future articles, including streaming, pagination, benchmarks, and a more advanced security model with short-lived tokens, JWT tokens, single sign-on (possibly using a service like Auth0), IP-based rate limiting (with Cloudflare workers), e-mail verification (with a service like SendGrid), and HttpOnly cookies.
+
+![Future Services](link-to-image)
+
 
 ## Setup the project
-We have added scripts to set up all the security roles, collections, indexes and user defined functions to make this work. 
-The scripts are meant to get you started easily and to document the process. Take a peek in the scripts/setup.js script to see
-how this is setup. To get started, create a database and an Admin token on https://dashboard.fauna.com/, copy the token (you'll need it soon)
-and run: 
+This app was created with Create React App, to start using it we need to: 
 
-`npm run setup`
+### Install npm packages
+`npm run install`
 
-The script will ask for the admin token, do not use the admin token for anything else than the setup script. 
-Admin tokens are powerful and meant to manipulate all aspects of the database (create/drop collections/indexes/roles)
-The script will give you a new token instead (a login token).
-Copy the token and place it in a .env.local file:
-`
-REACT_APP_LOCAL___BOOTSTRAP_FAUNADB_KEY=<YOUR FAUNA LOGIN KEY>
-`
+### Setup the database
+
+To set up the project, go to the [FaunaDB Dashboard](https://https://dashboard.fauna.com/) and sign up. 
+![Sign up](link-to-image)
+
+Once you are in the dashboard, click on New Database, fill in a name, and click Save. 
+![New database](link-to-image)
+
+You should now be on the "Overview" page of your new database. 
+![Setup database](link-to-image)
+
+Next, to manipulate the database from within our setup scripts, we need a key. Click on the Security tab in the left sidebar, then click the New key button. 
+![Admin key](link-to-image)
+
+In the "New key" form, the current database should already be selected. For "Role", leave it as "Admin" and give it a name. Next, click Save and copy the key secret displayed on the next page. It will not be displayed again.
+![Admin key](link-to-image)
+
+You now have the option to place it in your environment variables via .env.local, we have provided an example file .env.local.example that you can rename. Although the .env.local file is gitignored, make sure not to push your admin key, this key is powerful and meant to stay private. The setup scripts will therefore also ask you the key if you did not place it in your environment vars so you could opt to paste them in then instead.
+
+```
+REACT_APP_LOCAL___ADMIN=fnADpZWKPWACCyDrAWqjJrIqkwBaaDPBst4Zrn1Z
+```
+
+We have prepared a few scripts so that you only have to run the following commands to initialize your app, create all collections, and populate your database. The scripts will ask for the admin token that you have created and will give you further instructions.  
+```
+// run setup, this will create all the resources in your database
+// provide the admin key when the script asks for it. 
+npm run setup
+```
+When this script has finished setting up everything you will receive a new key. This key is the bootstrap key that has very tight permissions (it can only register and login) and will be used to bootstrap our application. 
+```
+REACT_APP_LOCAL___BOOTSTRAP_FAUNADB_KEY=<insert faunadb bootstrap key>
+```
+
+### Populate the database (optional)
+We also provided a script that adds some data to the database (accounts, users, fweets, comments, likes, etc..) for you to play around with. 
+```
+// with almost no permissions that you need to place in your .env.local as the
+// script suggestions
+npm run populate
+```
+
+### Setup cloudinary. 
+
+We use [Cloudinary](https://cloudinary.com/) to allow users to upload media which will be linked to the data of our application such as video and images. Currently, this is only used when a user creates a new Fweet with the media button on the right. To see this feature in action, create an account with Cloudinary and add your cloudname and a public template (there is a default template called ‘ml_default’ which you can make public) to the environment. 
+```
+REACT_APP_LOCAL___CLOUDINARY_CLOUDNAME=<cloudinary cloudname>
+REACT_APP_LOCAL___CLOUDINARY_TEMPLATE=<cloudinary template>
+```
 
 ## Run the project
-This project has been created with create-react-app and therefore has all the same commands such as 
+This project has been created with [Create React App](https://reactjs.org/docs/create-a-new-react-app.html#create-react-app)and therefore has the same familiar commands such as 
+
 `npm start`
 
-## What it does not do
-### Short-lived tokens
-At this point, FaunaDB does not provide short-lived tokens but it **can** be implemented fairly easily.
-This means that login tokens stick around unless you clean them up.
-We will soon add a script that can be ran on a serverless function to clean up tokens that have become too old. 
-Note that short-lived tokens are on the roadmap
-
-### Rate-limiting
-For some users, being able to connect to the database from the frontend is not acceptable without rate-limiting. 
-Session-based limiting can be implemented in FaunaDB, we will provide another example that builds upon this one with such an implementation.
-IP-based limiting is atm not possible to implement solely with FaunaDB, we will soon provide an example does rate-limiting using CloudFlare Workers. 
-
+to start your application. 
 
 ## Tests
-Some developers find it easy to look at the results of tests to see how something works.
-For those guys we have added integration tests to show how the different components work. 
+Although we did our best to comment all FaunaDB queries as extensively as possible and even wrote the queries in multiple steps that gradually increase the complexity, some developers find it easier to look at the results of tests to see how something works.For those guys/girls we have added a few integration tests to show how a few of the queries work. 
 
 ### Set up the tests
 In FaunaDB you can make as many databases as you want and place them in other databases.
 This can come in handy if you want to run multiple integration tests concurrently against FaunaDB or just to keep
-An overview. We chose to run each test suite in one database, for that we have defined multiple tokens in .env.test.local, one for each test suite
-
-TODO
+An overview. We chose to run each test suite in one database. These tests expect that you have created a database and placed an admin key for that database in .env.test.local for which we also provided an example file. You can choose to keep your database for tests separated from your application database but you can also simply paste in the admin key that you used before, the tests will create and destroy child test databases for you on the fly when tests run.
+```
+REACT_APP_TEST__ADMIN_KEY=<your test database key>
+```
 
 ### Run the tests
 `npm test`
