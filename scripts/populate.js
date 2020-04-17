@@ -26,7 +26,6 @@ const main = async () => {
 
   let adminKey = process.env.REACT_APP_LOCAL___ADMIN
 
-  console.log(adminKey)
   if (!adminKey) {
     const interactiveSession = readline.createInterface({
       input: process.stdin,

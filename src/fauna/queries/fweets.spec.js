@@ -64,7 +64,7 @@ beforeAll(async () => {
   } catch (err) {
     console.error(err)
   }
-}, 60000)
+}, 600000)
 
 it('A logged in user cant create tweets since it needs to use the UDF', function() {
   return expect(
@@ -79,22 +79,10 @@ it('The initial client can only call the UDF functions, it cant access tweets', 
   return expect(getFweets(bootstrapClient)).rejects.toHaveProperty(['message'], 'permission denied')
 }, 60000)
 
-it('A logged in user can retrieve tweets, but will not see any until it follows these people', function() {
+it('A logged in user can retrieve tweets, but will only see his own until it follows these people', function() {
   return getFweets(loggedInClient)
     .then(res => {
-      console.log(res)
-      expect(res).toMatchObject([])
-    })
-    .catch(err => {
-      console.error(err)
-      throw err
-    })
-}, 60000)
-
-it('A logged in user can retrieve tweets, but will not see any until it follows these people', function() {
-  return getFweets(loggedInClient)
-    .then(res => {
-      expect(res).toMatchObject([])
+      expect(res.length).toBe(1)
     })
     .catch(err => {
       console.error(err)
@@ -108,7 +96,6 @@ it('A user that follows another user, sees their fweets and all associated data'
       return getFweets(loggedInClient)
     })
     .then(res => {
-      console.log(res)
       expect(res).toHaveProperty([0])
       expect(res).toHaveProperty([0, 'fweet'])
       expect(res).toHaveProperty([0, 'fweet', 'comments']) // the number of comments

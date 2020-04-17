@@ -19,7 +19,8 @@ const {
   LowerCase,
   Filter,
   GT,
-  Union
+  Union,
+  Distinct
 } = q
 
 /** ********************** Searching ************************/
@@ -183,7 +184,7 @@ const CreateHashtagsAndUsersByWordpartsWithBinding2 = CreateIndex({
       fields: {
         length: Query(Lambda('hashtagOrUser', Length(Select(['data', 'name'], Var('hashtagOrUser'))))),
         wordparts: Query(
-          Lambda('hashtagOrUser', Union(WordPartGenerator(Select(['data', 'name'], Var('hashtagOrUser')))))
+          Lambda('hashtagOrUser', Distinct(Union(WordPartGenerator(Select(['data', 'name'], Var('hashtagOrUser'))))))
         )
       }
     }

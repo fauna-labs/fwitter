@@ -107,6 +107,7 @@ async function setupDatabaseRateLimitingSpec(client) {
   await handleSetupError(createUsersCollection(client), 'users collection')
   await handleSetupError(createAccountCollection(client), 'accounts collection')
   await handleSetupError(createRateLimitingCollection(client), 'profiles collection')
+  await handleSetupError(createFollowerStatsCollection(client), 'followerstats collection')
 
   console.log('4a. -- Roles                   -- Creating security roles to be assumed by the functions')
   await handleSetupError(client.query(CreateFnRoleLogin), 'function role - login') // without rate limiting: createFnRoleRegisterWithoutRateLimiting
@@ -129,6 +130,7 @@ async function setupDatabaseAuthSpec(client) {
   await handle(createAccountCollection(client), 'Create Accounts Collection')
   await handle(createUsersCollection(client), 'Create Users Collection')
   await handle(createRateLimitingCollection(client), 'Create Rate Limiting Collection')
+  await handleSetupError(createFollowerStatsCollection(client), 'followerstats collection')
   await handle(client.query(CreateFnRoleLoginWithoutRateLimiting), 'Create Login Fn role (no rate limiting)')
   await handle(client.query(CreateFnRoleRegisterWithoutRateLimiting), 'Create Register Fn role (no rate limiting)')
   await handle(client.query(CreateLoginSimpleUDF), 'Create Login UDF')
@@ -143,6 +145,7 @@ async function setupDatabaseSearchSpec(client) {
   await handleSetupError(createRateLimitingCollection(client), 'Create Rate Limiting Collection')
   await handleSetupError(createHashtagCollection(client), 'Create Hashtag Collection')
   await handleSetupError(createSearchIndexes(client), 'Create Search Indexes')
+  await handleSetupError(createFollowerStatsCollection(client), 'followerstats collection')
   await handleSetupError(client.query(CreateFnRoleLogin), 'function role - login')
   await handleSetupError(client.query(CreateFnRoleRegister), 'function role - register')
   await handleSetupError(client.query(CreateFnRoleRegisterWithUser), 'function role - register with user')

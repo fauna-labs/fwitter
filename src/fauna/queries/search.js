@@ -11,7 +11,7 @@ async function searchPeopleAndTags(client, keyword) {
       Let(
         {
           // Matching an index returns a setref.
-          setref: Match(Index('hashtags_and_users_by_wordparts'), keyword),
+          setref: Match(Index('hashtags_and_users_by_wordparts'), keyword.toLowerCase()),
           // We materialize this setref (get the actual index values) to be able to map over it.
           // We only consider the first page which we'll set to 10 elements, this should be enough for an autocomplete.
           pages: Paginate(Var('setref'), { size: 10 }),

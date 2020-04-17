@@ -82,7 +82,7 @@ it('We can rate-limit functions on identity and call them within the limit', fun
       console.error(err)
       console.log(err.requestResult.responseContent.errors)
     })
-}, 20000)
+}, 60000)
 
 it('Edge case, we can call exactly the limit amount of items', function() {
   // For testing, Let's just take a very silly add function
@@ -101,7 +101,7 @@ it('Edge case, we can call exactly the limit amount of items', function() {
       console.error(err)
       console.log(err.requestResult.responseContent.errors)
     })
-}, 20000)
+}, 60000)
 
 it('Rate limiting kicks in if we go over', function() {
   // For testing, Let's just take a very silly add function
@@ -118,7 +118,7 @@ it('Rate limiting kicks in if we go over', function() {
       .then(() => loggedInClient.query(RateLimitedSillySum))
       .then(() => loggedInClient.query(RateLimitedSillySum))
   ).rejects.toHaveProperty(['message'], 'transaction aborted')
-}, 20000)
+}, 60000)
 
 it('Rate limiting is scoped per user since we added Identity', function() {
   let loggedInClient = null
@@ -139,8 +139,12 @@ it('Rate limiting is scoped per user since we added Identity', function() {
       .then(() => loggedInClient.query(RateLimitedSillySum))
       .then(() => loggedInClient.query(RateLimitedSillySum))
       .then(res => expect(res).toBe(5))
+      .catch(err => {
+        console.log(err)
+        throw err
+      })
   )
-}, 20000)
+}, 60000)
 
 it('We can rate-limit functions globally (e.g. for register) by providing a constant', function() {
   // let's just set the constant 'silly_sum_global' as the key
@@ -163,7 +167,7 @@ it('We can rate-limit functions globally (e.g. for register) by providing a cons
       .then(() => loggedInClient.query(RateLimitedSillySum))
       .then(() => loggedInClient.query(RateLimitedSillySum))
   ).rejects.toHaveProperty(['message'], 'transaction aborted')
-}, 20000)
+}, 60000)
 
 it('Everything is fine if we wait a while', function() {
   // For testing, Let's just take a very silly add function
@@ -190,7 +194,7 @@ it('Everything is fine if we wait a while', function() {
       console.error(err)
       console.log(err.requestResult.responseContent.errors)
     })
-}, 20000)
+}, 60000)
 
 it('We can omit the time unit by passing in zeros to ', function() {
   // We could have a rate limit that never resets!
@@ -214,7 +218,7 @@ it('We can omit the time unit by passing in zeros to ', function() {
       .then(() => loggedInClient.query(RateLimitedSillySum))
       .then(() => loggedInClient.query(RateLimitedSillySum))
   ).rejects.toHaveProperty(['message'], 'transaction aborted')
-}, 20000)
+}, 60000)
 
 it('We could have logic that manually resets the rate-limiting ', function() {
   // The constant could be something else that identifies a user (e.g. the e-mail)
@@ -248,4 +252,4 @@ it('We could have logic that manually resets the rate-limiting ', function() {
     .then(() => loggedInClient.query(RateLimitedSillySum))
     .then(() => loggedInClient.query(RateLimitedSillySum))
     .then(res => expect(res).toBe(5))
-}, 20000)
+}, 60000)

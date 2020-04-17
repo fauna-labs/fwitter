@@ -66,9 +66,9 @@ beforeEach(async () => {
     await adminClient.query(DeleteAllRatelimiting)
     // register two test users
     await waitForIndexActive(adminClient, 'hashtags_and_users_by_wordparts')
-    // we will search on the handles of users (the last parameter)
-    await registerWithUser(adminClient, 'test@test.com', 'testtest', 'Test1', 'MrStrawberry')
-    await registerWithUser(adminClient, 'test2@test.com', 'testtest', 'Test1', 'SirPepper')
+    // we will search on the names of users (the second last parameter)
+    await registerWithUser(adminClient, 'test@test.com', 'testtest', 'MrStrawberry', 'userHandle1')
+    await registerWithUser(adminClient, 'test2@test.com', 'testtest', 'SirPepper', 'userHandle2')
     // and the hashtags
     await adminClient.query(CreateHashtags(['Berries']))
     await adminClient.query(CreateHashtags(['Pepper', 'Raw Honey']))
@@ -105,7 +105,7 @@ it('We can autocomplete tags and user handles', function() {
         })
       })
       .then(res => {
-        return searchPeopleAndTags(loggedInClient, 'pppppppp').then(res => {
+        return searchPeopleAndTags(loggedInClient, 'ppppppppppppppppppppp').then(res => {
           expect(res.length).toBe(1) // for very long names we have to type a longer part
           return res
         })
@@ -113,22 +113,24 @@ it('We can autocomplete tags and user handles', function() {
       .then(res => {
         return searchPeopleAndTags(loggedInClient, 'berr').then(res => {
           expect(res.length).toBe(2) // we find the tag berries as well as the user MrStrawberry
-          expect(res).toHaveProperty([0, 'handle'], 'MrStrawberry')
-          expect(res).toHaveProperty([1, 'name'], 'Berries')
+          expect(res).toHaveProperty([1, 'name'], 'MrStrawberry')
+          expect(res).toHaveProperty([0, 'name'], 'Berries')
           return res
         })
       })
       .then(res => {
         return searchPeopleAndTags(loggedInClient, 'pe').then(res => {
           expect(res.length).toBe(2) // we find the tag Pepper as well as the user SirPepper
-          expect(res).toHaveProperty([0, 'handle'], 'SirPepper')
-          expect(res).toHaveProperty([1, 'name'], 'Pepper')
+          expect(res).toHaveProperty([1, 'name'], 'SirPepper')
+          expect(res).toHaveProperty([0, 'name'], 'Pepper')
           return res
         })
       })
       .catch(err => {
-        console.error(err)
-        console.log(err.requestResult.responseContent.errors)
+        if (err.requestResult) {
+          console.log(err.requestResult.responseContent.errors)
+        }
+        throw err
       })
   )
 }, 60000)
