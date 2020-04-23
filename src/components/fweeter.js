@@ -19,6 +19,8 @@ const Fweeter = props => {
 
   const handleSubmit = event => {
     event.preventDefault()
+    
+    if (!fweet) return
     props.handleCreateFweet(fweet, asset).then(e => {
       setFweet('')
       setAsset(null)
