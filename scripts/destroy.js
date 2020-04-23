@@ -54,7 +54,7 @@ const deleteAll = async client => {
   const childDbName = process.env.REACT_APP_LOCAL___CHILD_DB_NAME
   if (typeof childDbName !== 'undefined') {
     // clean keys that are linked to this database
-    const deleted = await handleSetupError(
+    await handleSetupError(
       client.query(
         Map(Paginate(Documents(Keys())), x =>
           Let(
@@ -69,7 +69,6 @@ const deleteAll = async client => {
       ),
       'delete keys - delete keys linked to database'
     )
-    console.log(deleted)
     await handleSetupError(
       client.query(If(Exists(Database(childDbName)), Delete(Database(childDbName)), false)),
       'database - delete child database'
