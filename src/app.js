@@ -22,7 +22,7 @@ const App = () => {
   useEffect(() => {
     // Load all cloudinary scripts
     loadScript('https://widget.cloudinary.com/v2.0/global/all.js')
-  })
+  }, [])
 
   // Return the header and either show an error or render the loaded profiles.
   return (
