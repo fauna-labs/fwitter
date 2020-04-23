@@ -55,8 +55,8 @@ const Fweeter = props => {
       {asset ? <Asset asset={asset}></Asset> : null}
       <div className="fweet-card-actions">
         <div className="icon">{generateUploadImage()}</div>
-        <button className="icon">
-          <FontAwesomeIcon icon={faPaperPlane} onClick={handleSubmit} />
+        <button className="icon" onClick={handleSubmit}>
+          <FontAwesomeIcon icon={faPaperPlane} />
         </button>
       </div>
     </div>
