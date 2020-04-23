@@ -42,7 +42,7 @@ const deleteAll = async client => {
 5. tokens: ${tokens.data.length}`)
 
     console.log(
-      '\x1b[32m',
+      '\x1b[32m%s\x1b[0m',
       `In case you want to recreate the database, please wait 60 seconds to invalidate collection/index name caches`
     )
   } catch (err) {
