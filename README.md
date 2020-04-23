@@ -42,7 +42,7 @@ Next, click Save and copy the key secret displayed on the next page. It will not
 
 <img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/admin_key3.png?raw=true" width="600">
 
-You now have the option to place it in your environment variables via .env.local, we have provided an example file .env.local.example that you can rename. Although the .env.local file is gitignored, make sure not to push your admin key, this key is powerful and meant to stay private. The setup scripts will therefore also ask you the key if you did not place it in your environment vars so you could opt to paste them in then instead.
+You now have the option to place it in your environment variables (REACT_APP_LOCAL___ADMIN) via .env.local, we have provided an example file .env.local.example that you can rename. Although the .env.local file is gitignored, make sure not to push your admin key, this key is powerful and meant to stay private. The setup scripts will therefore also ask you the key if you did not place it in your environment vars so you could opt to paste them in then instead.
 
 ```
 REACT_APP_LOCAL___ADMIN=<insert your admin key>
@@ -54,7 +54,7 @@ We have prepared a few scripts so that you only have to run the following comman
 // provide the admin key when the script asks for it. 
 npm run setup
 ```
-When this script has finished setting up everything you will receive a new key. This key is the bootstrap key that has very tight permissions (it can only register and login) and will be used to bootstrap our application. 
+When this script has finished setting up everything you will receive a new key which will automatically be written in your .env.local file (or create this file if it doesn't exist yet from the example file). This key is the bootstrap key that has very tight permissions (it can only register and login) and will be used to bootstrap our application. 
 ```
 REACT_APP_LOCAL___BOOTSTRAP_FAUNADB_KEY=<insert faunadb bootstrap key>
 ```
@@ -104,3 +104,11 @@ REACT_APP_TEST__ADMIN_KEY=<your test database key>
 
 ### Run the tests
 `npm test`
+
+
+### Update something in the setup
+What if I am experimenting and want to update something? 
+To update User Defined Functions or Roles you can just alter the definition and run `npm setup` again, it will verify whether the role/function exists and override it.
+
+One thing that can't be altered just like that are indexes (makes sense of course, they could contain quite some data). 
+In order to just setup from scratch again you can run `npm destroy` followed by `npm setup`. Note, that since names such as collections and indexes are cached, you will have to wait +-60 secs but we can easily get around that by just removing and adding the complete database. In that case, we would remove our ADMIN key as well which would mean that we have to generate a new one each time. However, if we just create an admin key and use that to add (on setup) and remove (on destroy) a child database, than we can get around that inconvenience. We have provided you with that option. When you add the environment variable 'REACT_APP_LOCAL___CHILD_DB_NAME', the script will create a child database on `npm setup` and destroy it on `npm destroy` instead of removing all collections/indices/functions. 
