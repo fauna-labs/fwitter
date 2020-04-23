@@ -19,6 +19,8 @@ const Fweeter = props => {
 
   const handleSubmit = event => {
     event.preventDefault()
+    
+    if (!fweet) return
     props.handleCreateFweet(fweet, asset).then(e => {
       setFweet('')
       setAsset(null)
@@ -55,8 +57,8 @@ const Fweeter = props => {
       {asset ? <Asset asset={asset}></Asset> : null}
       <div className="fweet-card-actions">
         <div className="icon">{generateUploadImage()}</div>
-        <button className="icon">
-          <FontAwesomeIcon icon={faPaperPlane} onClick={handleSubmit} />
+        <button className="icon" onClick={handleSubmit}>
+          <FontAwesomeIcon icon={faPaperPlane} />
         </button>
       </div>
     </div>
