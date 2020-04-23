@@ -1,7 +1,9 @@
 import { QueryManager } from '../src/fauna/query-manager'
 require('dotenv').config({ path: '.env.' + process.argv[2] })
 const { handleSetupError } = require('../src/fauna/helpers/errors')
-
+const faunadb = require('faunadb')
+const q = faunadb.query
+const { CreateKey, Database } = q
 // This script sets up some data. It's not idempotent so running it again will
 // add duplicate fweets.
 const readline = require('readline-promise').default
@@ -25,6 +27,7 @@ const main = async () => {
   // In order to set up a database, we need a admin key, so let's ask the user for a key.
 
   let adminKey = process.env.REACT_APP_LOCAL___ADMIN
+  const childDbName = process.env.REACT_APP_LOCAL___CHILD_DB_NAME
 
   if (!adminKey) {
     const interactiveSession = readline.createInterface({
@@ -36,6 +39,16 @@ const main = async () => {
       interactiveSession.close()
     })
     console.log(explanation)
+  }
+
+  if (typeof childDbName !== 'undefined') {
+    const client = new faunadb.Client({ secret: adminKey })
+
+    const key = await handleSetupError(
+      client.query(CreateKey({ database: Database(childDbName), role: 'admin' })),
+      'Admin key - child db'
+    )
+    adminKey = key.secret
   }
 
   try {

@@ -291,6 +291,7 @@ function comment(client, fweetRef, message) {
 
 // We could get fweets via the collection, however than we have no control on the sorting
 // So it's only here as an additional example.
+// eslint-disable-next-line no-unused-vars
 function GetFweetsExample1(client) {
   return Paginate(Documents(Collection('fweets')))
 }
@@ -298,6 +299,7 @@ function GetFweetsExample1(client) {
 // We can use an index to get the sorting as we want it.
 // This query only gets the values contained in the index though.
 // Let's expand on that in the next function and get all related information of a fweet.
+// eslint-disable-next-line no-unused-vars
 function GetFweetsExample2(client) {
   return Paginate(Match(Index('all_fweets')))
 }
@@ -307,6 +309,7 @@ function GetFweetsExample2(client) {
 // this is abstracted in a function to make sure that everywhere where we want to return fweets
 // (e.g. after creation/update etc) that we get them in the exact same way.
 // We will also not call it immediately since we will store it as a User Defined Function (UDF) instead!
+// eslint-disable-next-line no-unused-vars
 function GetFweetsExample3(client) {
   return GetFweetsWithUsersMapGetGeneric(
     q.Map(
@@ -323,7 +326,7 @@ function GetFweetsExample3(client) {
  * First of all, a 'Join' is always done on an index. Join essentially transforms the set you pass into it and replaces it with the data from the index so it's rather a 'traverse'.
  * E.g. the example below returns the 'fweets' but no longer the account that is linked to it. This can be useful however, see the second example.
  */
-
+// eslint-disable-next-line no-unused-vars
 function GetFweetsWithUsersJoinExample1(client) {
   return client
     .query(Paginate(Join(Documents(Collection('accounts')), Index('fweets_by_author_simple'))))
@@ -340,6 +343,7 @@ function GetFweetsWithUsersJoinExample1(client) {
  * and one Get is of course one read. This means that the below approach is a more cost effective way to get all fweets for a specific account.
  * If a user would have 100s of fweets we could get these with two index reads instead of one index reads and 100s of gets.
  */
+// eslint-disable-next-line no-unused-vars
 function GetFweetsWithUsersJoinExample2(client, email) {
   return client
     .query(Paginate(Join(Match(Index('accounts_by_email'), email), Index('fweets_by_author_simple'))))

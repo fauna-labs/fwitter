@@ -4,9 +4,8 @@ import { setupDatabase, deleteAndCreateDatabase } from '../setup/database'
 
 import { handle } from './../helpers/errors'
 import { registerWithUser, login } from './auth'
-import { getFweets, createFweet, getFweetsWithUsersMapGet, createFweetWithoutUDF } from './fweets'
+import { getFweets, createFweet, createFweetWithoutUDF } from './fweets'
 import { follow } from './followers'
-import { search } from './search'
 
 // About this spec:
 // --------------------

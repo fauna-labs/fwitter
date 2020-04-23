@@ -74,6 +74,7 @@ function RegisterAccountExample2(email, password) {
 /* Register Example3 - we also want to create a user.
  * However, we also want to create a user automatically when we create an account.
  * We can use a Let to structure our query */
+// eslint-disable-next-line no-unused-vars
 function RegisterExample3(email, password, name, handle, icon, rateLimiting = true) {
   const RegisterFQLStatement = Let(
     {
