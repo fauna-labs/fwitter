@@ -23,7 +23,7 @@ const wrapPromiseError = (promise, entity) => {
     })
 }
 
-const handle = (promise, tag, printData) => {
+const alias = (promise, tag, printData) => {
   return promise
     .then(data => {
       // console.log('Success call:' + tag)
@@ -64,4 +64,4 @@ const safeVerifyError = (error, keys) => {
   }
   return error
 }
-export { handlePromiseError, wrapPromiseError, handle, handleSetupError, safeVerifyError }
+export { handlePromiseError, wrapPromiseError, alias, handleSetupError, safeVerifyError }

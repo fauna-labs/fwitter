@@ -6,7 +6,7 @@ const Form = props => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
-  const [handle, setHandle] = useState('')
+  const [alias, setAlias] = useState('')
 
   const handleChangeUserName = event => {
     setUsername(event.target.value)
@@ -20,8 +20,8 @@ const Form = props => {
     setName(event.target.value)
   }
 
-  const handleChangeHandle = event => {
-    setHandle(event.target.value)
+  const handleChangeAlias = event => {
+    setAlias(event.target.value)
   }
 
   const linkInfo = props.isLogin
@@ -31,11 +31,11 @@ const Form = props => {
   return (
     <React.Fragment>
       <div className="account-form-container">
-        <form className="account-form" onSubmit={e => props.handleSubmit(e, username, password, handle, name)}>
-          {props.isLogin ? null : renderInputField('Name', name, 'text', e => handleChangeName(e))}
-          {props.isLogin ? null : renderInputField('Handle', handle, 'text', e => handleChangeHandle(e))}
+        <form className="account-form" onSubmit={e => props.handleSubmit(e, username, password, alias, name)}>
+         {props.isLogin ? null : renderInputField('Name', name, 'text', e => handleChangeName(e))}
+          {props.isLogin ? null : renderInputField('Alias', alias, 'text', e => handleChangeAlias(e))}
           {renderInputField('Email', username, 'text', e => handleChangeUserName(e))}
-          {renderInputField('Password', password, 'password', e => handleChangePassword(e))}
+          {renderInputField('Password', password, 'password', e => handleChangePassword(e))}          
           <div className="input-row align-right">
             <Link to={linkInfo.link}> {linkInfo.linkText}</Link>
             <button className={props.isLogin ? 'login' : 'register'}> {props.isLogin ? 'Login' : 'Register'} </button>
@@ -50,7 +50,7 @@ const renderInputField = (name, value, type, fun) => {
   const lowerCaseName = name.toLowerCase()
   return (
     <div className="input-row">
-      <span className="input-row-column">{name}</span>
+      <label htmlFor="{lowerCaseName}" className="input-row-column">{name}</label>
       <input
         className="input-row-column"
         autoComplete={lowerCaseName}

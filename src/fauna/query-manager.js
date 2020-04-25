@@ -39,10 +39,10 @@ class QueryManager {
     })
   }
 
-  register(email, password, name, handle) {
+  register(email, password, name, alias) {
     // randomly choose an icon
     const icon = 'person' + (Math.round(Math.random() * 22) + 1)
-    return registerWithUser(this.client, email, password, name, handle, icon).then(res => {
+    return registerWithUser(this.client, email, password, name, alias, icon).then(res => {
       if (res) {
         this.client = new faunadb.Client({ secret: res.secret.secret })
       }

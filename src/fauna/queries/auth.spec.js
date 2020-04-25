@@ -4,7 +4,7 @@ import { CreateOrUpdateFunction, CreateAccountUDF } from './../setup/functions'
 import { setupProtectedResource, setupDatabaseAuthSpec, deleteAndCreateDatabase } from '../setup/database'
 import { DeleteAllAccounts } from '../setup/accounts'
 
-import { handle, wrapPromiseError } from './../helpers/errors'
+import { alias, wrapPromiseError } from './../helpers/errors'
 import { register, login } from './auth'
 
 // About this spec:
@@ -24,14 +24,14 @@ beforeAll(async () => {
     const adminClient = new faunadb.Client({
       secret: process.env.REACT_APP_TEST__ADMIN_KEY
     })
-    const secret = await handle(deleteAndCreateDatabase(adminClient, 'auth-spec'), 'Creating temporary test database')
+    const secret = await alias(deleteAndCreateDatabase(adminClient, 'auth-spec'), 'Creating temporary test database')
     client = new faunadb.Client({
       secret: secret
     })
     // Setup the database for this test.
-    await handle(setupDatabaseAuthSpec(client), 'Setup Database')
+    await alias(setupDatabaseAuthSpec(client), 'Setup Database')
     // Set up a resource that we should only be able to access after logging in.
-    misterProtectedRef = await handle(setupProtectedResource(client), 'Setup a protected collection and entity')
+    misterProtectedRef = await alias(setupProtectedResource(client), 'Setup a protected collection and entity')
   } catch (err) {
     console.error(err)
   }

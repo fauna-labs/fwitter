@@ -1,4 +1,4 @@
-import { handle } from '../helpers/errors'
+import { alias } from '../helpers/errors'
 const faunadb = require('faunadb')
 const q = faunadb.query
 const { CreateCollection, CreateIndex, Collection, Exists, If, Index, Delete, Lambda, Paginate, Match, Var } = q
@@ -39,17 +39,17 @@ const CreateUsersByAccount = CreateIndex({
   serialized: true
 })
 
-const CreateUsersByHandle = CreateIndex({
-  name: 'users_by_handle',
+const CreateUsersByAlias = CreateIndex({
+  name: 'users_by_alias',
   source: Collection('users'),
-  // We will search on the handle
+  // We will search on the alias
   terms: [
     {
-      field: ['data', 'handle']
+      field: ['data', 'alias']
     }
   ],
   // no values are added, we'll just return the reference.
-  // unique prevents that two users have the same handle!
+  // unique prevents that two users have the same alias!
   unique: true,
   serialized: true
 })
@@ -61,29 +61,29 @@ const DeleteAllUsers = If(
 )
 
 async function createUsersCollection(client) {
-  await handle(client.query(If(Exists(Collection('users')), true, CreateUsersCollection)), 'Creating users collection')
-  await handle(client.query(If(Exists(Index('all_users')), true, CreateIndexAllUsers)), 'Creating all_users index')
-  await handle(
-    client.query(If(Exists(Index('users_by_handle')), true, CreateUsersByHandle)),
-    'Creating users_by_handle index'
+  await alias(client.query(If(Exists(Collection('users')), true, CreateUsersCollection)), 'Creating users collection')
+  await alias(client.query(If(Exists(Index('all_users')), true, CreateIndexAllUsers)), 'Creating all_users index')
+  await alias(
+    client.query(If(Exists(Index('users_by_alias')), true, CreateUsersByAlias)),
+    'Creating users_by_alias index'
   )
-  await handle(
+  await alias(
     client.query(If(Exists(Index('users_by_account')), true, CreateUsersByAccount)),
     'Creating users_by_account index'
   )
 }
 
 async function deleteUsersCollection(client) {
-  await handle(
+  await alias(
     client.query(If(Exists(Collection('users')), true, Delete(Collection('users')))),
     'Delete users collection'
   )
-  await handle(
-    client.query(If(Exists(Index('users_by_handle')), true, Delete(Index('users_by_handle')))),
-    'Delete users_by_handle index'
+  await alias(
+    client.query(If(Exists(Index('users_by_alias')), true, Delete(Index('users_by_alias')))),
+    'Delete users_by_alias index'
   )
-  await handle(client.query(If(Exists(Index('all_users')), true, Delete(Index('all_users')))), 'Delete all_users index')
-  await handle(
+  await alias(client.query(If(Exists(Index('all_users')), true, Delete(Index('all_users')))), 'Delete all_users index')
+  await alias(
     client.query(If(Exists(Index('users_by_account')), true, Delete(Index('users_by_account')))),
     'Delete users_by_account index'
   )
@@ -94,7 +94,7 @@ export {
   CreateUsersCollection,
   CreateUsersByAccount,
   DeleteAllUsers,
-  CreateUsersByHandle,
+  CreateUsersByAlias,
   createUsersCollection,
   deleteUsersCollection
 }

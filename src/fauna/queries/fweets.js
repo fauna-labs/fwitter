@@ -417,12 +417,12 @@ function getFweetsByTag(client, tag) {
   return client.query(Call(q.Function('get_fweets_by_tag'), tag)).then(res => flattenDataKeys(res))
 }
 
-function GetFweetsByAuthor(authorHandle) {
+function GetFweetsByAuthor(authorAlias) {
   const FQLStatement = Let(
     {
-      // We only receive the userHandle, not reference (since this is passed through the URL, a ref would be ugly in the url right?)
+      // We only receive the userAlias, not reference (since this is passed through the URL, a ref would be ugly in the url right?)
       // So let's get the user, we assume that it still exists (if not Get will error but that is fine for our use case)
-      authorReference: Select([0], Paginate(Match(Index('users_by_handle'), authorHandle))),
+      authorReference: Select([0], Paginate(Match(Index('users_by_alias'), authorAlias))),
       results: GetFweetsWithUsersMapGetGeneric(
         // When we look at the feed of fweets of a certain user, we are just going to order them
         // Chronologically.
@@ -439,8 +439,8 @@ function GetFweetsByAuthor(authorHandle) {
   return AddRateLimiting('get_fweets_by_author', FQLStatement, Identity())
 }
 
-function getFweetsByAuthor(client, authorHandle) {
-  return client.query(Call(q.Function('get_fweets_by_author'), authorHandle)).then(res => flattenDataKeys(res))
+function getFweetsByAuthor(client, authorAlias) {
+  return client.query(Call(q.Function('get_fweets_by_author'), authorAlias)).then(res => flattenDataKeys(res))
 }
 
 /* Get fweets and the user that is the author of the message.
