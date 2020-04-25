@@ -37,7 +37,7 @@ const App = () => {
               <Route exact path="/accounts/register">
                 <Register />
               </Route>
-              <Route path="/users/:authorHandle" component={User} />
+              <Route path="/users/:authorAlias" component={User} />
               <Route path="/tags/:tag" component={Tag} />
               <Route path="/">
                 <Home />

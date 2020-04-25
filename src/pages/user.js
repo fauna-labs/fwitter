@@ -12,7 +12,7 @@ import { safeVerifyError } from '../fauna/helpers/errors'
 
 const UserPage = () => {
   // The userid in the url
-  const { authorHandle } = useParams()
+  const { authorAlias } = useParams()
 
   const [state, setState] = useState({
     fweets: [],
@@ -28,7 +28,7 @@ const UserPage = () => {
     if (user) {
       setState({ error: null, fweets: [], loaded: false })
       faunaQueries
-        .getFweetsByAuthor(authorHandle)
+        .getFweetsByAuthor(authorAlias)
         .then(result => {
           console.log('fweets', result)
           setState({
@@ -52,7 +52,7 @@ const UserPage = () => {
           }
         })
     }
-  }, [user, authorHandle])
+  }, [user, authorAlias])
 
   const update = (fweets, loaded, error) => {
     setState({
@@ -66,7 +66,7 @@ const UserPage = () => {
     <React.Fragment>
       <Nav />
       <div className="fweeter-and-feed-container">
-        <div className="feed-title">{'@' + authorHandle}</div>
+        <div className="feed-title">{'@' + authorAlias}</div>
         <Feed update={update} error={state.error} loaded={state.loaded} fweets={state.fweets} />
       </div>
       {user ? <Search /> : null}
