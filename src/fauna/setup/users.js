@@ -1,4 +1,4 @@
-import { alias } from '../helpers/errors'
+import { handlePromiseError } from '../helpers/errors'
 const faunadb = require('faunadb')
 const q = faunadb.query
 const { CreateCollection, CreateIndex, Collection, Exists, If, Index, Delete, Lambda, Paginate, Match, Var } = q
@@ -61,29 +61,38 @@ const DeleteAllUsers = If(
 )
 
 async function createUsersCollection(client) {
-  await alias(client.query(If(Exists(Collection('users')), true, CreateUsersCollection)), 'Creating users collection')
-  await alias(client.query(If(Exists(Index('all_users')), true, CreateIndexAllUsers)), 'Creating all_users index')
-  await alias(
+  await handlePromiseError(
+    client.query(If(Exists(Collection('users')), true, CreateUsersCollection)),
+    'Creating users collection'
+  )
+  await handlePromiseError(
+    client.query(If(Exists(Index('all_users')), true, CreateIndexAllUsers)),
+    'Creating all_users index'
+  )
+  await handlePromiseError(
     client.query(If(Exists(Index('users_by_alias')), true, CreateUsersByAlias)),
     'Creating users_by_alias index'
   )
-  await alias(
+  await handlePromiseError(
     client.query(If(Exists(Index('users_by_account')), true, CreateUsersByAccount)),
     'Creating users_by_account index'
   )
 }
 
 async function deleteUsersCollection(client) {
-  await alias(
+  await handlePromiseError(
     client.query(If(Exists(Collection('users')), true, Delete(Collection('users')))),
     'Delete users collection'
   )
-  await alias(
+  await handlePromiseError(
     client.query(If(Exists(Index('users_by_alias')), true, Delete(Index('users_by_alias')))),
     'Delete users_by_alias index'
   )
-  await alias(client.query(If(Exists(Index('all_users')), true, Delete(Index('all_users')))), 'Delete all_users index')
-  await alias(
+  await handlePromiseError(
+    client.query(If(Exists(Index('all_users')), true, Delete(Index('all_users')))),
+    'Delete all_users index'
+  )
+  await handlePromiseError(
     client.query(If(Exists(Index('users_by_account')), true, Delete(Index('users_by_account')))),
     'Delete users_by_account index'
   )

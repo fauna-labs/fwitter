@@ -35,11 +35,10 @@ const Home = () => {
         .catch(err => {
           console.log(err)
           const rawError = safeVerifyError(err, ['requestResult', 'responseRaw'])
-          if (rawError.includes('Rate limiting')) {
+          if (rawError && rawError.includes('Rate limiting')) {
             setState({ error: { message: 'Rate-limiting' }, fweets: [], loaded: true })
             toast.warn('You are reloading too fast')
-          } else if (rawError.includes('permission denied')) {
-            console.log(err)
+          } else if (rawError && rawError.includes('permission denied')) {
             setState({ error: { message: 'Permission denied!' }, fweets: [], loaded: true })
             toast.error('No data permissions')
           } else {

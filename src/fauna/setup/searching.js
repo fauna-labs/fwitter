@@ -105,7 +105,7 @@ const CreateHashtagsByWordpartsWithBinding = CreateIndex({
 
 // --- Step 3 ---
 // We can index multiple collections !
-// We want to search for user aliass as well, not only for tagS!
+// We want to search for user aliases as well, not only for tagS!
 // Since we can put multiple collections in one index, we can do that.
 // In this case we decided to let users and accounts have the same property 'wordparts'.
 // the users property has a different name, we can easily fix that with bindings as well.

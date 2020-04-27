@@ -7,7 +7,7 @@ import { isFunction } from '../fauna/helpers/util'
 
 const renderLogo = sessionContext => {
   return (
-    <div className="fauna-logo">
+    <div key="link_logo" className="fauna-logo">
       <Link className="logo-container" to="/">
         <img alt="Fauna logo" src="/images/logo-fauna-white.svg" />
       </Link>
@@ -53,13 +53,15 @@ const renderLink = (link, sessionContext) => {
   if (link.handleClick) {
     return (
       <li onClick={event => handleLogout(event, sessionContext)} key={`nav-link-${link.label}`}>
-        <Link>{link.label}</Link>
+        <Link key={'link_' + link.label}>{link.label}</Link>
       </li>
     )
   } else {
     return (
       <li key={`nav-link-${link.href}-${link.label}`}>
-        <Link to={link.href}>{link.label}</Link>
+        <Link key={'link_' + link.label} to={link.href}>
+          {link.label}
+        </Link>
       </li>
     )
   }

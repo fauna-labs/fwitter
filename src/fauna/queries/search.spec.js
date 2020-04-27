@@ -5,13 +5,13 @@ import { DeleteAllRatelimiting } from '../setup/rate-limiting'
 import { DeleteAllAccounts } from '../setup/accounts'
 import { DeleteAllUsers } from '../setup/users'
 import { registerWithUser, login } from './auth'
-import { alias } from './../helpers/errors'
+import { handlePromiseError } from './../helpers/errors'
 import { searchPeopleAndTags } from './search'
 import { CreateHashtags } from './hashtags'
 // About this spec:
 // --------------------
 // This spec shows how the autocompletion search worls.
-// A search that searches over multiple collections, in this case user aliass and tags (indexes can range over multiple collections)
+// A search that searches over multiple collections, in this case user aliases and tags (indexes can range over multiple collections)
 // It's based on bindings which is like a calculated value.
 // That means that the value to search for is automatically transformed to the 'ngrams' that support the search
 
@@ -45,13 +45,16 @@ beforeAll(async () => {
     adminClient = new faunadb.Client({
       secret: process.env.REACT_APP_TEST__ADMIN_KEY
     })
-    const secret = await alias(deleteAndCreateDatabase(adminClient, 'search-spec'), 'Creating temporary test database')
+    const secret = await handlePromiseError(
+      deleteAndCreateDatabase(adminClient, 'search-spec'),
+      'Creating temporary test database'
+    )
     // Scope key to the new database
     adminClient = new faunadb.Client({
       secret: secret
     })
     // Setup the database for this test
-    await alias(setupDatabaseSearchSpec(adminClient), 'Setup Database')
+    await handlePromiseError(setupDatabaseSearchSpec(adminClient), 'Setup Database')
   } catch (err) {
     console.error(err)
   }
@@ -78,7 +81,7 @@ beforeEach(async () => {
   }
 }, 1200000)
 
-it('We can autocomplete tags and user aliass', function() {
+it('We can autocomplete tags and user aliases', function() {
   let loggedInClient = null
 
   return (

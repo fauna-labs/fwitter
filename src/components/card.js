@@ -24,7 +24,7 @@ const Card = props => {
           <div className="fweet-card-text">
             <p className="fweet-description"> {fweetAndMore.fweet.message} </p>
           </div>
-          <div className="fweet-card-text refweet">          
+          <div className="fweet-card-text refweet">
             <div className="fweet-header">
               <span className="fweet-name"> {fweetAndMore.original.user.name} </span>
               <span className="fweet-alias"> @{fweetAndMore.original.user.alias} </span>

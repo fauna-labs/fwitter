@@ -2,7 +2,7 @@ import faunadb from 'faunadb'
 
 import { setupDatabase, deleteAndCreateDatabase } from '../setup/database'
 
-import { alias } from './../helpers/errors'
+import { handlePromiseError } from './../helpers/errors'
 import { registerWithUser, login } from './auth'
 import { getFweets, createFweet, createFweetWithoutUDF } from './fweets'
 import { follow } from './followers'
@@ -29,7 +29,7 @@ beforeAll(async () => {
       secret: process.env.REACT_APP_TEST__ADMIN_KEY
     })
     // Create the admin client for the new database to bootstrap things
-    const secret = await alias(
+    const secret = await handlePromiseError(
       deleteAndCreateDatabase(adminClientParentDb, 'fweets-spec'),
       'Creating temporary test database'
     )
@@ -37,26 +37,32 @@ beforeAll(async () => {
       secret: secret
     })
     // Setup the database for this test.
-    await alias(setupDatabase(adminClient), 'Setup Database')
+    await handlePromiseError(setupDatabase(adminClient), 'Setup Database')
 
     // Create a client with a login key (getting privileges from 'memberships' in roles)
     // We create a user directly as well
-    await alias(registerWithUser(adminClient, 'test@test.com', 'testtest'), 'Register with User')
-    const res = await alias(login(adminClient, 'test@test.com', 'testtest'), 'Login')
+    await handlePromiseError(registerWithUser(adminClient, 'test@test.com', 'testtest'), 'Register with User')
+    const res = await handlePromiseError(login(adminClient, 'test@test.com', 'testtest'), 'Login')
     loggedInClient = new faunadb.Client({ secret: res.secret })
     user1Ref = res.user.ref
 
-    await alias(registerWithUser(adminClient, 'test2@test.com', 'testtest'), 'Register with User')
-    const res2 = await alias(login(adminClient, 'test2@test.com', 'testtest'), 'Login')
+    await handlePromiseError(registerWithUser(adminClient, 'test2@test.com', 'testtest'), 'Register with User')
+    const res2 = await handlePromiseError(login(adminClient, 'test2@test.com', 'testtest'), 'Login')
     loggedInClient2 = new faunadb.Client({ secret: res2.secret })
 
     // Create a client with the bootstrap key (assuming the bootstrap role)
-    const key = await alias(adminClient.query(CreateKey({ role: Role('keyrole_calludfs') })), 'Creating Bootstrap Key')
+    const key = await handlePromiseError(
+      adminClient.query(CreateKey({ role: Role('keyrole_calludfs') })),
+      'Creating Bootstrap Key'
+    )
     bootstrapClient = new faunadb.Client({ secret: key.secret })
 
     user2Ref = res2.user.ref
-    await alias(createFweet(loggedInClient, 'Tweet user 1 #tag1', ['tag1']), 'Creating Fweet 1')
-    await alias(createFweet(loggedInClient2, 'Tweet user 2 #tag2 #tag3', ['tag2', 'tag3']), 'Creating Fweet 2')
+    await handlePromiseError(createFweet(loggedInClient, 'Tweet user 1 #tag1', ['tag1']), 'Creating Fweet 1')
+    await handlePromiseError(
+      createFweet(loggedInClient2, 'Tweet user 2 #tag2 #tag3', ['tag2', 'tag3']),
+      'Creating Fweet 2'
+    )
 
     return
     // Set up a resource that we should only be able to access after logging in.
