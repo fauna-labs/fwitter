@@ -39,7 +39,7 @@ import { createFweetStatsCollection } from './fweetstats'
 import { createFollowerStatsCollection } from './followerstats'
 import { createCommentsCollection } from './comments'
 
-import { handle, handleSetupError } from '../helpers/errors'
+import { handleSetupError } from '../helpers/errors'
 
 const q = faunadb.query
 const { Collection, CreateCollection, Create, If, Exists, Database, CreateDatabase, CreateKey, Delete, Do } = q
@@ -49,11 +49,11 @@ const { Collection, CreateCollection, Create, If, Exists, Database, CreateDataba
 // Here we insert the lambdas into the database as User Defined Functions (UDF) or a sort of stored procedure.
 
 async function deleteAndCreateDatabase(client, name) {
-  const database = await handle(
+  const database = await handleSetupError(
     client.query(Do(If(Exists(Database(name)), Delete(Database(name)), false), CreateDatabase({ name: name }))),
     'Deleting and recreate database'
   )
-  const adminKey = await handle(
+  const adminKey = await handleSetupError(
     client.query(CreateKey({ database: database.ref, role: 'admin' })),
     'Create Admin key for db'
   )
@@ -127,16 +127,19 @@ async function setupDatabaseRateLimitingSpec(client) {
 }
 
 async function setupDatabaseAuthSpec(client) {
-  await handle(createAccountCollection(client), 'Create Accounts Collection')
-  await handle(createUsersCollection(client), 'Create Users Collection')
-  await handle(createRateLimitingCollection(client), 'Create Rate Limiting Collection')
+  await handleSetupError(createAccountCollection(client), 'Create Accounts Collection')
+  await handleSetupError(createUsersCollection(client), 'Create Users Collection')
+  await handleSetupError(createRateLimitingCollection(client), 'Create Rate Limiting Collection')
   await handleSetupError(createFollowerStatsCollection(client), 'followerstats collection')
-  await handle(client.query(CreateFnRoleLoginWithoutRateLimiting), 'Create Login Fn role (no rate limiting)')
-  await handle(client.query(CreateFnRoleRegisterWithoutRateLimiting), 'Create Register Fn role (no rate limiting)')
-  await handle(client.query(CreateLoginSimpleUDF), 'Create Login UDF')
-  await handle(client.query(CreateAccountUDF), 'Create Account UDF')
-  await handle(client.query(CreateBootstrapRoleSimple), 'Create Bootstrap Role')
-  await handle(client.query(CreatePowerlessRole), 'Create Powerless Role')
+  await handleSetupError(client.query(CreateFnRoleLoginWithoutRateLimiting), 'Create Login Fn role (no rate limiting)')
+  await handleSetupError(
+    client.query(CreateFnRoleRegisterWithoutRateLimiting),
+    'Create Register Fn role (no rate limiting)'
+  )
+  await handleSetupError(client.query(CreateLoginSimpleUDF), 'Create Login UDF')
+  await handleSetupError(client.query(CreateAccountUDF), 'Create Account UDF')
+  await handleSetupError(client.query(CreateBootstrapRoleSimple), 'Create Bootstrap Role')
+  await handleSetupError(client.query(CreatePowerlessRole), 'Create Powerless Role')
 }
 
 async function setupDatabaseSearchSpec(client) {
@@ -163,13 +166,13 @@ async function setupDatabaseSearchSpec(client) {
 
 async function setupProtectedResource(client) {
   let misterProtectedRef
-  await handle(
+  await handleSetupError(
     client.query(
       If(Exists(Collection('something_protected')), true, CreateCollection({ name: 'something_protected' }))
     ),
     'Create protected collection'
   )
-  await handle(
+  await handleSetupError(
     client.query(Create(Collection('something_protected'), { data: { name: 'mister-protected' } })).then(res => {
       misterProtectedRef = res.ref
     }),

@@ -375,7 +375,7 @@ const CreateFnRoleManipulateFweet = CreateOrUpdateRole({
       actions: { read: true }
     },
     {
-      resource: Index('users_by_handle'),
+      resource: Index('users_by_alias'),
       actions: { read: true }
     }
   ]

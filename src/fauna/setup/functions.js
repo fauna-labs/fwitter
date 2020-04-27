@@ -52,8 +52,8 @@ const CreateAccountWithUserUDF = CreateOrUpdateFunction({
   name: 'register_with_user',
   body: Query(
     Lambda(
-      ['email', 'password', 'name', 'handle', 'icon'],
-      RegisterWithUser(Var('email'), Var('password'), Var('name'), Var('handle'), Var('icon'))
+      ['email', 'password', 'name', 'alias', 'icon'],
+      RegisterWithUser(Var('email'), Var('password'), Var('name'), Var('alias'), Var('icon'))
     )
   ),
   role: Role('functionrole_register_with_user')
@@ -63,8 +63,8 @@ const CreateAccountWithUserNoRatelimitingUDF = CreateOrUpdateFunction({
   name: 'register_with_user',
   body: Query(
     Lambda(
-      ['email', 'password', 'name', 'handle', 'icon'],
-      RegisterWithUser(Var('email'), Var('password'), Var('name'), Var('handle'), Var('icon'), false)
+      ['email', 'password', 'name', 'alias', 'icon'],
+      RegisterWithUser(Var('email'), Var('password'), Var('name'), Var('alias'), Var('icon'), false)
     )
   ),
   role: Role('functionrole_register_with_user')

@@ -23,20 +23,6 @@ const wrapPromiseError = (promise, entity) => {
     })
 }
 
-const handle = (promise, tag, printData) => {
-  return promise
-    .then(data => {
-      // console.log('Success call:' + tag)
-      if (printData) console.log(data)
-      return data
-    })
-    .catch(error => {
-      console.error('Failed to execute: ' + tag)
-      console.error(error)
-      throw error
-    })
-}
-
 const handleSetupError = (promise, entity) => {
   return promise
     .then(data => {
@@ -64,4 +50,4 @@ const safeVerifyError = (error, keys) => {
   }
   return error
 }
-export { handlePromiseError, wrapPromiseError, handle, handleSetupError, safeVerifyError }
+export { handlePromiseError, wrapPromiseError, handleSetupError, safeVerifyError }

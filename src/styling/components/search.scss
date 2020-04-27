@@ -66,7 +66,7 @@
   margin-bottom: $grid-unit / 2;
 }
 
-.search-result-name-and-handle {
+.search-result-name-and-alias {
   display: flex;
   flex: 1 1 auto;
   padding-left: 10px;
@@ -74,12 +74,12 @@
   
 }
 
-.search-result-name-and-handle .name {
+.search-result-name-and-alias .name {
   font-weight: 500;
   font-size: 14px;
 }
 
-.search-result-name-and-handle .handle {
+.search-result-name-and-alias .alias {
   font-size: 12px;
   color: $grey;
 }

@@ -27,7 +27,7 @@ const Card = props => {
           <div className="fweet-card-text refweet">
             <div className="fweet-header">
               <span className="fweet-name"> {fweetAndMore.original.user.name} </span>
-              <span className="fweet-handle"> @{fweetAndMore.original.user.handle} </span>
+              <span className="fweet-alias"> @{fweetAndMore.original.user.alias} </span>
             </div>
             <p className="fweet-description"> {fweetAndMore.original.fweet.message} </p>
           </div>
@@ -42,7 +42,7 @@ const Card = props => {
           <div className="fweet-card-text">
             <div className="fweet-header">
               <span className="fweet-name"> {fweetAndMore.user.name} </span>
-              <span className="fweet-handle"> @{fweetAndMore.user.handle} </span>
+              <span className="fweet-alias"> @{fweetAndMore.user.alias} </span>
             </div>
             <p className="fweet-description"> {fweetAndMore.fweet.message} </p>
           </div>
@@ -60,7 +60,7 @@ const Card = props => {
           <div className="fweet-card-text comment" key={commandAndAuthor.comment.ref.toString()}>
             <div className="fweet-header">
               <span className="fweet-name"> {commandAndAuthor.author.name} </span>
-              <span className="fweet-handle"> @{commandAndAuthor.author.handle} </span>
+              <span className="fweet-alias"> @{commandAndAuthor.author.alias} </span>
             </div>
             <p className="fweet-description"> {commandAndAuthor.comment.message} </p>
           </div>

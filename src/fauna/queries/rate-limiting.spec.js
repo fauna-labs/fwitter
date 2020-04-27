@@ -5,7 +5,7 @@ import { DeleteAllRatelimiting } from '../setup/rate-limiting'
 import { DeleteAllAccounts } from '../setup/accounts'
 import { DeleteAllUsers } from '../setup/users'
 import { registerWithUser, login } from './auth'
-import { handle } from './../helpers/errors'
+import { handlePromiseError } from './../helpers/errors'
 
 // the rate-limiting function we are actually testing
 import { AddRateLimiting } from './rate-limiting'
@@ -35,7 +35,7 @@ beforeAll(async () => {
     adminClient = new faunadb.Client({
       secret: process.env.REACT_APP_TEST__ADMIN_KEY
     })
-    const secret = await handle(
+    const secret = await handlePromiseError(
       deleteAndCreateDatabase(adminClient, 'ratelimiting-spec'),
       'Creating temporary test database'
     )
@@ -44,7 +44,7 @@ beforeAll(async () => {
       secret: secret
     })
     // Setup the database for this test
-    await handle(setupDatabaseRateLimitingSpec(adminClient), 'Setup Database')
+    await handlePromiseError(setupDatabaseRateLimitingSpec(adminClient), 'Setup Database')
   } catch (err) {
     console.error(err)
   }

@@ -75,13 +75,13 @@ function RegisterAccountExample2(email, password) {
  * However, we also want to create a user automatically when we create an account.
  * We can use a Let to structure our query */
 // eslint-disable-next-line no-unused-vars
-function RegisterExample3(email, password, name, handle, icon, rateLimiting = true) {
+function RegisterExample3(email, password, name, alias, icon, rateLimiting = true) {
   const RegisterFQLStatement = Let(
     {
       user: Create(Collection('users'), {
         data: {
           name: name,
-          handle: handle,
+          alias: alias,
           icon: icon
         }
       }),
@@ -107,7 +107,7 @@ function RegisterExample3(email, password, name, handle, icon, rateLimiting = tr
 /* Register Example4 - let's extend it to do e-mail validation 
    And follow ourselves at the moment we create the user 
    since you only see the feed of the people you follow */
-function RegisterWithUser(email, password, name, handle, icon, rateLimiting = true) {
+function RegisterWithUser(email, password, name, alias, icon, rateLimiting = true) {
   // It's always a good idea to use If for such validations compared to Do since Do is not short-circuited at this point
   // at the read-phase, which means that you will incur more reads.
   const ValidateEmail = FqlStatement =>
@@ -136,7 +136,7 @@ function RegisterWithUser(email, password, name, handle, icon, rateLimiting = tr
       user: Create(Collection('users'), {
         data: {
           name: name,
-          handle: handle,
+          alias: alias,
           icon: icon
         }
       }),
@@ -269,9 +269,9 @@ function register(client, email, password) {
   return client.query(Call(q.Function('register'), email, password)).then(res => flattenDataKeys(res))
 }
 
-function registerWithUser(client, email, password, name, handle, icon) {
+function registerWithUser(client, email, password, name, alias, icon) {
   return client
-    .query(Call(q.Function('register_with_user'), email, password, name, handle, icon))
+    .query(Call(q.Function('register_with_user'), email, password, name, alias, icon))
     .then(res => flattenDataKeys(res))
 }
 

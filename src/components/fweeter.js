@@ -5,6 +5,7 @@ import { Uploader } from './uploader'
 import Asset from './asset'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+import { toast } from 'react-toastify'
 
 const Fweeter = props => {
   const [fweet, setFweet] = useState('')
@@ -19,8 +20,12 @@ const Fweeter = props => {
 
   const handleSubmit = event => {
     event.preventDefault()
-    
-    if (!fweet) return
+
+    if (!fweet) {
+      toast.warn('Please enter some text first :)')
+      return
+    }
+
     props.handleCreateFweet(fweet, asset).then(e => {
       setFweet('')
       setAsset(null)

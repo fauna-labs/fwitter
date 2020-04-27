@@ -31,7 +31,7 @@ const Search = props => {
   }
 
   const handleUserClick = (event, searchResult) => {
-    history.push(`/users/${searchResult.handle}`)
+    history.push(`/users/${searchResult.alias}`)
 
     event.stopPropagation()
   }
@@ -69,11 +69,11 @@ const Search = props => {
         <React.Fragment>
           <div className="search-results">
             <div className="search-results-title">People</div>
-            <div className="search-results-people">{renderUserResults(searchResults.filter(e => e.handle))}</div>
+            <div className="search-results-people">{renderUserResults(searchResults.filter(e => e.alias))}</div>
           </div>
           <div className="search-results">
             <div className="search-results-title">Tags</div>
-            <div className="search-results-tags">{renderTagResults(searchResults.filter(e => !e.handle))}</div>
+            <div className="search-results-tags">{renderTagResults(searchResults.filter(e => !e.alias))}</div>
           </div>
         </React.Fragment>
       )
@@ -90,9 +90,9 @@ const Search = props => {
           <div className="avatar">
             <img className="avatar-image" src={`/images/${res.icon}.png`} alt="profile" />
           </div>
-          <div className="search-result-name-and-handle">
+          <div className="search-result-name-and-alias">
             <div className="name">{res.name}</div>
-            <div className="handle">@{res.handle}</div>
+            <div className="alias">@{res.alias}</div>
           </div>
           <div className="search-result-follow-button" onClick={event => handleFollowUser(event, res)}>
             <button className="icon">
