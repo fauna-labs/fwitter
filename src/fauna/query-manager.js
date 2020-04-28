@@ -10,6 +10,7 @@ import {
   refweet,
   comment
 } from './queries/fweets'
+import { UpdateUser } from './queries/users'
 import { searchPeopleAndTags } from './queries/search'
 import { follow } from './queries/followers'
 
@@ -81,6 +82,11 @@ class QueryManager {
 
   likeFweet(fweetRef) {
     return likeFweet(this.client, fweetRef)
+  }
+
+  updateUser(name, alias) {
+    // we don't pass in the icon yet atm
+    return this.client.query(UpdateUser(name, alias))
   }
 
   refweet(fweetRef, message) {

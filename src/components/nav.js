@@ -43,22 +43,22 @@ const links = [
   renderLogo,
   s => renderProtectedLink(s, { href: '/', label: 'Home' }),
   // Who knows, these features might be next.
-  // s => renderProtectedLink(s, { href: '/', label: 'Topics' }),
-  // s => renderProtectedLink(s, { href: '/', label: 'Messages' }),
-  // s => renderProtectedLink(s, { href: '/', label: 'Profile' }),
+  // s => renderProtectedLink(s, { href: '/topics', label: 'Topics' }),
+  // s => renderProtectedLink(s, { href: '/messages', label: 'Messages' }),
+  s => renderProtectedLink(s, { href: '/profile', label: 'Profile' }),
   renderLoginLink
 ]
 
 const renderLink = (link, sessionContext) => {
   if (link.handleClick) {
     return (
-      <li onClick={event => handleLogout(event, sessionContext)} key={`nav-link-${link.label}`}>
-        <Link key={'link_' + link.label}>{link.label}</Link>
+      <li className="nav-link" onClick={event => handleLogout(event, sessionContext)} key={`nav-link-${link.label}`}>
+        <div key={'link_' + link.label}>{link.label}</div>
       </li>
     )
   } else {
     return (
-      <li key={`nav-link-${link.href}-${link.label}`}>
+      <li className="nav-link" key={`nav-link-${link.href}-${link.label}`}>
         <Link key={'link_' + link.label} to={link.href}>
           {link.label}
         </Link>

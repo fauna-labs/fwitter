@@ -32,10 +32,10 @@ const Form = props => {
     <React.Fragment>
       <div className="account-form-container">
         <form className="account-form" onSubmit={e => props.handleSubmit(e, username, password, alias, name)}>
-         {props.isLogin ? null : renderInputField('Name', name, 'text', e => handleChangeName(e))}
+          {props.isLogin ? null : renderInputField('Name', name, 'text', e => handleChangeName(e))}
           {props.isLogin ? null : renderInputField('Alias', alias, 'text', e => handleChangeAlias(e))}
-          {renderInputField('Email', username, 'text', e => handleChangeUserName(e))}
-          {renderInputField('Password', password, 'password', e => handleChangePassword(e))}          
+          {renderInputField('Email', username, 'text', e => handleChangeUserName(e), 'username')}
+          {renderInputField('Password', password, 'password', e => handleChangePassword(e), 'current-password')}
           <div className="input-row align-right">
             <Link to={linkInfo.link}> {linkInfo.linkText}</Link>
             <button className={props.isLogin ? 'login' : 'register'}> {props.isLogin ? 'Login' : 'Register'} </button>
@@ -46,19 +46,21 @@ const Form = props => {
   )
 }
 
-const renderInputField = (name, value, type, fun) => {
+const renderInputField = (name, value, type, fun, autocomplete) => {
   const lowerCaseName = name.toLowerCase()
   return (
     <div className="input-row">
-      <label htmlFor="{lowerCaseName}" className="input-row-column">{name}</label>
+      <label htmlFor="{lowerCaseName}" className="input-row-column">
+        {name}
+      </label>
       <input
         className="input-row-column"
-        autoComplete={lowerCaseName}
         value={value}
         onChange={fun}
         type={type}
         id={lowerCaseName}
         name={lowerCaseName}
+        autoComplete={autocomplete}
       />
     </div>
   )

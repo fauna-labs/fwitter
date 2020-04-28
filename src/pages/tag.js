@@ -63,8 +63,8 @@ const TagPage = () => {
   return (
     <React.Fragment>
       <Nav />
-      <div className="fweeter-and-feed-container">
-        <div className="feed-title">{'#' + tag}</div>
+      <div className="main-column">
+        <div className="main-title">{'#' + tag}</div>
         <Feed update={update} error={state.error} loaded={state.loaded} fweets={state.fweets} />
       </div>
       {user ? <Search /> : null}

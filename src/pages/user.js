@@ -65,8 +65,8 @@ const UserPage = () => {
   return (
     <React.Fragment>
       <Nav />
-      <div className="fweeter-and-feed-container">
-        <div className="feed-title">{'@' + authorAlias}</div>
+      <div className="main-column">
+        <div className="main-title">{'@' + authorAlias}</div>
         <Feed update={update} error={state.error} loaded={state.loaded} fweets={state.fweets} />
       </div>
       {user ? <Search /> : null}

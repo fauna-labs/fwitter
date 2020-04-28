@@ -22,11 +22,9 @@ const Home = () => {
 
   useEffect(() => {
     if (user) {
-      setState({ error: null, fweets: [], loaded: false })
       faunaQueries
         .getFweets()
         .then(result => {
-          console.log('fweets', result)
           setState({
             fweets: result,
             loaded: true
@@ -81,7 +79,7 @@ const Home = () => {
   return (
     <React.Fragment>
       <Nav />
-      <div className="fweeter-and-feed-container">
+      <div className="main-column">
         {user ? <Fweeter handleCreateFweet={handleCreateFweet}></Fweeter> : null}
         <Feed update={update} error={state.error} loaded={state.loaded} fweets={state.fweets} />
       </div>
