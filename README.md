@@ -2,6 +2,9 @@ This project is an example of how to a 'real-world' app with highly dynamic data
 
 <img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/fwitter.png?raw=true" width="600">
 
+There is a first [CSS-tricks article](https://css-tricks.com/rethinking-twitter-as-a-serverless-app/) that describes the application in general, explains auth, data modeling and simple queries and brushes over the other features. 
+More articles are coming on the [Fauna blog](https://fauna.com/blog) and/or CSS Tricks
+
 
 It uses the Fauna Query Language (FQL) and starts with a frontend-only approach that directly accesses the serverless database FaunaDB for data storage, authentication, and authorization. 
 
