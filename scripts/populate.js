@@ -41,7 +41,7 @@ const main = async () => {
     console.log(explanation)
   }
 
-  if (typeof childDbName !== 'undefined') {
+  if (typeof childDbName !== 'undefined' && childDbName !== '') {
     const client = new faunadb.Client({ secret: adminKey })
 
     const key = await handleSetupError(
