@@ -52,7 +52,7 @@ const deleteAll = async client => {
   // easily without having to wait for cache invalidation of collection/index names.
   // In this case, we can just nuke the database completely.
   const childDbName = process.env.REACT_APP_LOCAL___CHILD_DB_NAME
-  if (typeof childDbName !== 'undefined') {
+  if (typeof childDbName !== 'undefined' && childDbName !== '') {
     // clean keys that are linked to this database
     await handleSetupError(
       client.query(
