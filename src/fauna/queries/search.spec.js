@@ -10,7 +10,7 @@ import { searchPeopleAndTags } from './search'
 import { CreateHashtags } from './hashtags'
 // About this spec:
 // --------------------
-// This spec shows how the autocompletion search worls.
+// This spec shows how the autocompletion search works.
 // A search that searches over multiple collections, in this case user aliases and tags (indexes can range over multiple collections)
 // It's based on bindings which is like a calculated value.
 // That means that the value to search for is automatically transformed to the 'ngrams' that support the search
