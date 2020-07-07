@@ -135,6 +135,14 @@ const CreateIndexFweetsByTag = CreateIndex({
               likes: Select(['data', 'likes'], Var('fweet')),
               comments: Select(['data', 'comments'], Var('fweet')),
               refweets: Select(['data', 'refweets'], Var('fweet')),
+
+              // DISCLAIMER !!!!
+              // Now() should not be used in bindings since it does not provide correct results,
+              // Something I did not know at the time of writing.
+              // Instead please use either a created_at time you store on the document 
+              // or an updated time instead. We'll update the app from the moment I find time to test
+              // an alternative approach. 
+
               txtime: Now(),
               unixstarttime: Time('1970-01-01T00:00:00+00:00'),
               ageInSecsSinceUnix: TimeDiff(Var('unixstarttime'), Var('txtime'), 'minutes')
