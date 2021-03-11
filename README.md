@@ -94,21 +94,6 @@ This project has been created with [Create React App](https://reactjs.org/docs/c
 
 to start your application. 
 
-## Tests
-Although we did our best to comment all FaunaDB queries as extensively as possible and even wrote the queries in multiple steps that gradually increase the complexity, some developers find it easier to look at the results of tests to see how something works.For those guys/girls we have added a few integration tests to show how a few of the queries work. 
-
-### Set up the tests
-In FaunaDB you can make as many databases as you want and place them in other databases.
-This can come in handy if you want to run multiple integration tests concurrently against FaunaDB or just to keep
-An overview. We chose to run each test suite in one database. These tests expect that you have created a database and placed an admin key for that database in .env.test.local for which we also provided an example file. You can choose to keep your database for tests separated from your application database but you can also simply paste in the admin key that you used before, the tests will create and destroy child test databases for you on the fly when tests run.
-```
-REACT_APP_TEST__ADMIN_KEY=<your test database key>
-```
-
-### Run the tests
-`npm test`
-
-
 ### Update something in the setup
 What if I am experimenting and want to update something? 
 To update User Defined Functions or Roles you can just alter the definition and run `npm run setup` again, it will verify whether the role/function exists and override it.
