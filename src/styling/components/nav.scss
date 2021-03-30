@@ -34,18 +34,24 @@ nav ul li:hover {
    border-radius: 5px;
 }
 
-nav a {
+
+
+nav .nav-link {
     display: flex;
     border: 0px solid #18ab29;
     cursor: pointer;
     width: 100px;
     height: 44px;
-    text-decoration: none;
     padding-left: $grid-unit;
     color: $hard-white;
     font-weight: 700;
     font-size: $menu-font-size;
     align-items: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: $hard-white;
 }
 
 .fauna-logo {

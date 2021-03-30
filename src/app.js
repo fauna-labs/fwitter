@@ -5,12 +5,14 @@ import Home from './pages/home'
 import Login from './pages/login'
 import User from './pages/user'
 import Tag from './pages/tag'
+import Profile from './pages/profile'
 import Register from './pages/register'
 import Layout from './components/layout'
 import { SessionProvider, sessionReducer } from './context/session'
 
 const App = () => {
   const [state, dispatch] = React.useReducer(sessionReducer, { user: null })
+  const { user } = state
 
   const loadScript = url => {
     const script = document.createElement('script')
@@ -37,6 +39,7 @@ const App = () => {
               <Route exact path="/accounts/register">
                 <Register />
               </Route>
+              {user ? <Route path="/profile/" component={Profile} /> : null}
               <Route path="/users/:authorAlias" component={User} />
               <Route path="/tags/:tag" component={Tag} />
               <Route path="/">

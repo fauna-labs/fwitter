@@ -16,29 +16,6 @@ const CreateIndexAllUsers = CreateIndex({
   serialized: true
 })
 
-const CreateUsersByAccount = CreateIndex({
-  name: 'users_by_account',
-  source: Collection('users'),
-  // We will search on account
-  terms: [
-    {
-      field: ['data', 'account']
-    }
-  ],
-  // if no values are added, the index will just return the reference.
-  values: [
-    {
-      field: ['ref']
-    },
-    {
-      field: ['data', 'account']
-    }
-  ],
-  // unique prevents that two users are linked to the same account
-  unique: true,
-  serialized: true
-})
-
 const CreateUsersByAlias = CreateIndex({
   name: 'users_by_alias',
   source: Collection('users'),
@@ -73,10 +50,6 @@ async function createUsersCollection(client) {
     client.query(If(Exists(Index('users_by_alias')), true, CreateUsersByAlias)),
     'Creating users_by_alias index'
   )
-  await handlePromiseError(
-    client.query(If(Exists(Index('users_by_account')), true, CreateUsersByAccount)),
-    'Creating users_by_account index'
-  )
 }
 
 async function deleteUsersCollection(client) {
@@ -92,16 +65,11 @@ async function deleteUsersCollection(client) {
     client.query(If(Exists(Index('all_users')), true, Delete(Index('all_users')))),
     'Delete all_users index'
   )
-  await handlePromiseError(
-    client.query(If(Exists(Index('users_by_account')), true, Delete(Index('users_by_account')))),
-    'Delete users_by_account index'
-  )
 }
 
 export {
   CreateIndexAllUsers,
   CreateUsersCollection,
-  CreateUsersByAccount,
   DeleteAllUsers,
   CreateUsersByAlias,
   createUsersCollection,
