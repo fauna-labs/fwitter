@@ -1,6 +1,8 @@
+A full introduction to this project can be found in the [docs](https://docs.fauna.com/fauna/current/start/apps/fwitter.html). 
+
 This project is an example of how to a 'real-world' app with highly dynamic data in a serverless fashion using React hooks, FaunaDB, and Cloudinary. Since FaunaDB was developed by ex-Twitter engineers, a Twitter-like application felt like an appropriately sentimental choices so we call this serverless baby ‘Fwitter’. 
 
-<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/fwitter.png?raw=true" width="600">
+<img src="https://github.com/fauna-brecht/fwitter/blob/main/readme/fwitter.png?raw=true" width="600">
 
 There is a first [CSS-tricks article](https://css-tricks.com/rethinking-twitter-as-a-serverless-app/) that describes the application in general, explains auth, data modeling and simple queries and brushes over the other features. 
 More articles are coming on the [Fauna blog](https://fauna.com/blog) and/or CSS Tricks
@@ -8,11 +10,11 @@ More articles are coming on the [Fauna blog](https://fauna.com/blog) and/or CSS 
 
 It uses the Fauna Query Language (FQL) and starts with a frontend-only approach that directly accesses the serverless database FaunaDB for data storage, authentication, and authorization. 
 
-<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/stack1.png?raw=true" width="400">
+<img src="https://github.com/fauna-brecht/fwitter/blob/main/readme/stack1.png?raw=true" width="400">
 
 A few features are still missing and will be covered in future articles, including streaming, pagination, benchmarks, and a more advanced security model with short-lived tokens, JWT tokens, single sign-on (possibly using a service like Auth0), IP-based rate limiting (with Cloudflare workers), e-mail verification (with a service like SendGrid), and HttpOnly cookies.
 
-<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/stack2.png?raw=true" width="400">
+<img src="https://github.com/fauna-brecht/fwitter/blob/main/readme/stack2.png?raw=true" width="400">
 
 
 ## Setup the project
@@ -25,25 +27,25 @@ This app was created with Create React App, to start using it we need to:
 
 To set up the project, go to the [FaunaDB Dashboard](https://dashboard.fauna.com/) and sign up. 
 
-<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/sign_up.png?raw=true" width="600">
+<img src="https://github.com/fauna-brecht/fwitter/blob/main/readme/sign_up.png?raw=true" width="600">
 
 Once you are in the dashboard, click on New Database, fill in a name, and click Save. 
-<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/new_database.png?raw=true" width="600">
+<img src="https://github.com/fauna-brecht/fwitter/blob/main/readme/new_database.png?raw=true" width="600">
 
-<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/new_database2.png?raw=true" width="600">
+<img src="https://github.com/fauna-brecht/fwitter/blob/main/readme/new_database2.png?raw=true" width="600">
 
 You should now be on the "Overview" page of your new database. 
 Next, to manipulate the database from within our setup scripts, we need a key. Click on the Security tab in the left sidebar, then click the New key button. 
 
-<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/admin_key1.png?raw=true" width="600">
+<img src="https://github.com/fauna-brecht/fwitter/blob/main/readme/admin_key1.png?raw=true" width="600">
 
 In the "New key" form, the current database should already be selected. For "Role", leave it as "Admin" and give it a name.
 
-<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/admin_key2.png?raw=true" width="600">
+<img src="https://github.com/fauna-brecht/fwitter/blob/main/readme/admin_key2.png?raw=true" width="600">
 
 Next, click Save and copy the key secret displayed on the next page. It will not be displayed again.
 
-<img src="https://github.com/fauna-brecht/fwitter/blob/master/readme/admin_key3.png?raw=true" width="600">
+<img src="https://github.com/fauna-brecht/fwitter/blob/main/readme/admin_key3.png?raw=true" width="600">
 
 You now have the option to place it in your environment variables (REACT_APP_LOCAL___ADMIN) via .env.local, we have provided an example file .env.local.example that you can rename. Although the .env.local file is gitignored, make sure not to push your admin key, this key is powerful and meant to stay private. The setup scripts will therefore also ask you the key if you did not place it in your environment vars so you could opt to paste them in then instead.
 
