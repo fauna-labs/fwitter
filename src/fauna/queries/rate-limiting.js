@@ -1,13 +1,11 @@
 /*
  * Ideally we limit the amount of calls that come to Login.
  */
-const faunadb = require('faunadb')
-const q = faunadb.query
-const {
+import {
   If,
   Epoch,
   Match,
-  Index,
+  FaunaIndex,
   Update,
   Collection,
   Let,
@@ -26,8 +24,9 @@ const {
   Now,
   And,
   Not,
-  Equals
-} = q
+  Equals,
+  Events
+} from 'faunadb/query'
 
 const rateLimitingConfig = {
   get_fweets: {
@@ -81,7 +80,7 @@ function AddRateLimiting(action, FqlQueryToExecute, Identifier, calls, perSecond
   }
 
   return Let(
-    { rateLimitingPage: Paginate(Match(Index('rate_limiting_by_action_and_identity'), action, Identifier)) },
+    { rateLimitingPage: Paginate(Match(FaunaIndex('rate_limiting_by_action_and_identity'), action, Identifier)) },
     If(
       // Check whether there is a value
       IsEmpty(Var('rateLimitingPage')),
@@ -107,7 +106,7 @@ function VerifyRateLimitingAndUpdate(action, numberOfEvents, maxAgeInMs, FqlQuer
   return Let(
     // We split up the calculation for educational purposes. First we get the first X events of the ratelimiting entry in reverse order (before: null does that)
     {
-      eventsPage: Paginate(q.Events(Select(['data', 0], Var('rateLimitingPage'))), {
+      eventsPage: Paginate(Events(Select(['data', 0], Var('rateLimitingPage'))), {
         size: numberOfEvents,
         before: null
       }),

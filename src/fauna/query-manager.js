@@ -1,4 +1,4 @@
-import faunadb from 'faunadb'
+import { Client } from 'faunadb'
 
 import { registerWithUser, login, logout } from './queries/auth'
 import {
@@ -26,7 +26,7 @@ class QueryManager {
     // A client is just a wrapper, it does not create a persitant connection
     // FaunaDB behaves like an API and will include the token on each request.
     this.bootstrapToken = token || process.env.REACT_APP_LOCAL___BOOTSTRAP_FAUNADB_KEY
-    this.client = new faunadb.Client({
+    this.client = new Client({
       secret: token || this.bootstrapToken
     })
   }
@@ -34,7 +34,7 @@ class QueryManager {
   login(email, password) {
     return login(this.client, email, password).then(res => {
       if (res) {
-        this.client = new faunadb.Client({ secret: res.secret })
+        this.client = new Client({ secret: res.secret })
       }
       return res
     })
@@ -45,7 +45,7 @@ class QueryManager {
     const icon = 'person' + (Math.round(Math.random() * 22) + 1)
     return registerWithUser(this.client, email, password, name, alias, icon).then(res => {
       if (res) {
-        this.client = new faunadb.Client({ secret: res.secret.secret })
+        this.client = new Client({ secret: res.secret.secret })
       }
       return res
     })
@@ -53,7 +53,7 @@ class QueryManager {
 
   logout() {
     return logout(this.client).then(res => {
-      this.client = new faunadb.Client({
+      this.client = new Client({
         secret: this.bootstrapToken
       })
       return res

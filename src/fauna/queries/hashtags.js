@@ -1,17 +1,15 @@
-const faunadb = require('faunadb')
-const q = faunadb.query
-const { Select, Paginate, Create, Collection, Let, Lambda, Var, Exists, Match, Index, If } = q
+import { Map, Select, Paginate, Create, Collection, Let, Lambda, Var, Exists, Match, FaunaIndex, If } from 'faunadb/query'
 
 function CreateHashtags(hashtags) {
   // hashtags is an array that looks like:
   // [{ name: '#hashtag', wordparts: [ 'h', 'ha', ... , 'ag', 'g']}]
-  return q.Map(
+  return Map(
     hashtags,
     Lambda(
       ['hashtag'],
       Let(
         {
-          match: Match(Index('hashtags_by_name'), Var('hashtag'))
+          match: Match(FaunaIndex('hashtags_by_name'), Var('hashtag'))
         },
         If(
           Exists(Var('match')),

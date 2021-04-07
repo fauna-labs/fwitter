@@ -1,7 +1,5 @@
 import { flattenDataKeys } from '../helpers/util'
-const faunadb = require('faunadb')
-const q = faunadb.query
-const { Call, Create, Collection, Var, Let } = q
+import { Call, Create, Collection, Var, Let, FaunaFunction } from 'faunadb/query'
 
 /* Follow will be used to create a user defined function
  * hence we do not execute it but return an FQL statement instead */
@@ -23,7 +21,7 @@ function Follow(authorRef, userRef) {
 
 // Call the user defined function (the function is defined and updated in the '../setup/functions' file)
 function follow(client, authorRef) {
-  return client.query(Call(q.Function('follow'), authorRef)).then(res => flattenDataKeys(res))
+  return client.query(Call(FaunaFunction('follow'), authorRef)).then(res => flattenDataKeys(res))
 }
 
 export { Follow, follow }

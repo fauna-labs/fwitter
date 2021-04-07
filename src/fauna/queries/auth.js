@@ -1,11 +1,4 @@
-import faunadb from 'faunadb'
-import { flattenDataKeys } from '../helpers/util'
-import { AddRateLimiting } from './rate-limiting'
-import { Follow } from './followers'
-import { CreateUser } from './users'
-
-const q = faunadb.query
-const {
+import {
   Paginate,
   If,
   IsEmpty,
@@ -19,15 +12,20 @@ const {
   Login,
   Match,
   Get,
-  Index,
+  FaunaIndex,
   Identify,
   Do,
   Delete,
   ContainsStrRegex,
   Abort,
   GTE,
-  Length
-} = q
+  Length,
+  FaunaFunction
+} from 'faunadb/query'
+import { flattenDataKeys } from '../helpers/util'
+import { AddRateLimiting } from './rate-limiting'
+import { Follow } from './followers'
+import { CreateUser } from './users'
 
 /*
  * The following functions return an Fauna Query Language (FQL) statement that we will store in a  User defined Function (UDF).
@@ -163,7 +161,7 @@ function RegisterWithUser(email, password, name, alias, icon, rateLimiting = tru
  * If we just want to login with an account we would do it like this */
 // eslint-disable-next-line no-unused-vars
 function LoginAccountExample1(email, password) {
-  return Login(Match(Index('accounts_by_email'), email), { password: password })
+  return Login(Match(FaunaIndex('accounts_by_email'), email), { password: password })
 }
 
 /* Login Example 2 - what if I want to return the user as well?
@@ -177,7 +175,7 @@ function LoginAccountExample2(email, password) {
     {
       // Login will return a token if the password matches the credentials that were provided on register.
       // Note that this FQL statement excepts two variables to exist: 'email', 'password'
-      res: Login(Match(Index('accounts_by_email'), email), {
+      res: Login(Match(FaunaIndex('accounts_by_email'), email), {
         password: password
       }),
       // We will return both the token as some account/user information.
@@ -213,11 +211,11 @@ function LoginAccountExample3(email, password) {
 
 function LoginAccount(email, password) {
   const FQLStatement = If(
-    Identify(Match(Index('accounts_by_email'), email), password),
+    Identify(Match(FaunaIndex('accounts_by_email'), email), password),
     Do(
       Let(
         {
-          rateLimitingPage: Paginate(Match(Index('rate_limiting_by_action_and_identity'), 'login', email))
+          rateLimitingPage: Paginate(Match(FaunaIndex('rate_limiting_by_action_and_identity'), 'login', email))
         },
         If(
           // Check whether there is a value
@@ -250,17 +248,17 @@ function LoginAccount(email, password) {
 
 /* ********** Call the UDF login function *********** */
 async function login(client, email, password) {
-  return client.query(Call(q.Function('login'), email, password)).then(res => flattenDataKeys(res))
+  return client.query(Call(FaunaFunction('login'), email, password)).then(res => flattenDataKeys(res))
 }
 
 /* ********** Call the UDF register function *********** */
 function register(client, email, password) {
-  return client.query(Call(q.Function('register'), email, password)).then(res => flattenDataKeys(res))
+  return client.query(Call(FaunaFunction('register'), email, password)).then(res => flattenDataKeys(res))
 }
 
 function registerWithUser(client, email, password, name, alias, icon) {
   return client
-    .query(Call(q.Function('register_with_user'), email, password, name, alias, icon))
+    .query(Call(FaunaFunction('register_with_user'), email, password, name, alias, icon))
     .then(res => flattenDataKeys(res))
 }
 

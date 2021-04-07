@@ -13,7 +13,7 @@
     "custom-env": "^1.0.2",
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
-    "faunadb": "^2.11.1",
+    "faunadb": "git+https://github.com/fauna/faunadb-js.git#esm_build",
     "node-sass": "^4.13.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",

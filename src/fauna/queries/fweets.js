@@ -2,9 +2,7 @@ import { flattenDataKeys } from '../helpers/util'
 import { CreateHashtags } from './../queries/hashtags'
 import { AddRateLimiting } from './../queries/rate-limiting'
 
-const faunadb = require('faunadb')
-const q = faunadb.query
-const {
+import {
   Call,
   Create,
   Collection,
@@ -17,7 +15,7 @@ const {
   Select,
   Let,
   Match,
-  Index,
+  FaunaIndex,
   Join,
   If,
   Exists,
@@ -28,8 +26,10 @@ const {
   Not,
   Contains,
   Abort,
-  Now
-} = q
+  Now,
+  Map,
+  FaunaFunction
+} from 'faunadb/query'
 
 /* CreateFweet will be used to create a user defined function
  * hence we do not execute it but return an FQL statement instead */
@@ -67,10 +67,10 @@ function LikeFweet(fweetRef) {
     {
       account: Get(Identity()),
       userRef: Select(['data', 'user'], Var('account')),
-      fweetStatisticsRef: Match(Index('fweetstats_by_user_and_fweet'), Var('userRef'), fweetRef),
+      fweetStatisticsRef: Match(FaunaIndex('fweetstats_by_user_and_fweet'), Var('userRef'), fweetRef),
       fweet: Get(fweetRef),
       authorRef: Select(['data', 'author'], Var('fweet')),
-      followerStatisticsRef: Match(Index('followerstats_by_author_and_follower'), Var('authorRef'), Var('userRef')),
+      followerStatisticsRef: Match(FaunaIndex('followerstats_by_author_and_follower'), Var('authorRef'), Var('userRef')),
       newLikeStatus: If(
         Exists(Var('fweetStatisticsRef')),
         Not(Select(['data', 'like'], Get(Var('fweetStatisticsRef')))),
@@ -141,7 +141,7 @@ function Refweet(fweetRef, message, tags) {
       userRef: Select(['data', 'user'], Var('account')),
       fweet: Get(fweetRef),
       authorRef: Select(['data', 'author'], Var('fweet')),
-      fweetStatisticsRef: Match(Index('fweetstats_by_user_and_fweet'), Var('userRef'), fweetRef),
+      fweetStatisticsRef: Match(FaunaIndex('fweetstats_by_user_and_fweet'), Var('userRef'), fweetRef),
       // Keep a var so we know whether we already refweeted or not
       refweetStatus: If(
         Exists(Var('fweetStatisticsRef')),
@@ -149,7 +149,7 @@ function Refweet(fweetRef, message, tags) {
         false
       ),
       // We're going to keep stats for that author/follower relation to order his tweets in popularity.
-      followerStatisticsRef: Match(Index('followerstats_by_author_and_follower'), Var('authorRef'), Var('userRef'))
+      followerStatisticsRef: Match(FaunaIndex('followerstats_by_author_and_follower'), Var('authorRef'), Var('userRef'))
     },
     If(
       Var('refweetStatus'),
@@ -221,7 +221,7 @@ function Comment(fweetRef, message) {
     {
       account: Get(Identity()),
       userRef: Select(['data', 'user'], Var('account')),
-      fweetStatisticsRef: Match(Index('fweetstats_by_user_and_fweet'), Var('userRef'), fweetRef),
+      fweetStatisticsRef: Match(FaunaIndex('fweetstats_by_user_and_fweet'), Var('userRef'), fweetRef),
       fweetStatistics: If(
         Exists(Var('fweetStatisticsRef')),
         Update(Select(['ref'], Get(Var('fweetStatisticsRef'))), {
@@ -270,23 +270,23 @@ function createFweetWithoutUDF(client, message, tags) {
 function createFweet(client, message, asset) {
   // Extract hashtags from the message
   const hashTags = findHashtags(message).map(t => t.substring(1))
-  return client.query(Call(q.Function('create_fweet'), message, hashTags, asset)).then(res => flattenDataKeys(res))
+  return client.query(Call(FaunaFunction('create_fweet'), message, hashTags, asset)).then(res => flattenDataKeys(res))
 }
 
 // Call the likeFweet UDF function
 function likeFweet(client, fweetRef) {
-  return client.query(Call(q.Function('like_fweet'), fweetRef)).then(res => flattenDataKeys(res))
+  return client.query(Call(FaunaFunction('like_fweet'), fweetRef)).then(res => flattenDataKeys(res))
 }
 
 // Call the refweet UDF function
 function refweet(client, fweetRef, message) {
   const hashTags = findHashtags(message).map(t => t.substring(1))
-  return client.query(Call(q.Function('refweet'), fweetRef, message, hashTags)).then(res => flattenDataKeys(res))
+  return client.query(Call(FaunaFunction('refweet'), fweetRef, message, hashTags)).then(res => flattenDataKeys(res))
 }
 
 // Call the comment UDF function
 function comment(client, fweetRef, message) {
-  return client.query(Call(q.Function('comment'), fweetRef, message)).then(res => flattenDataKeys(res))
+  return client.query(Call(FaunaFunction('comment'), fweetRef, message)).then(res => flattenDataKeys(res))
 }
 
 // We could get fweets via the collection, however than we have no control on the sorting
@@ -301,7 +301,7 @@ function GetFweetsExample1(client) {
 // Let's expand on that in the next function and get all related information of a fweet.
 // eslint-disable-next-line no-unused-vars
 function GetFweetsExample2(client) {
-  return Paginate(Match(Index('all_fweets')))
+  return Paginate(Match(FaunaIndex('all_fweets')))
 }
 
 // In our next version we use GetFweetsWithUsersMapGetGeneric to take out the references
@@ -312,8 +312,8 @@ function GetFweetsExample2(client) {
 // eslint-disable-next-line no-unused-vars
 function GetFweetsExample3(client) {
   return GetFweetsWithUsersMapGetGeneric(
-    q.Map(
-      Paginate(Match(Index('all_fweets'))),
+    Map(
+      Paginate(Match(FaunaIndex('all_fweets'))),
       // Since our index contains two values, the lambda takes an array of two values
       Lambda(['ts', 'ref'], Var('ref'))
     )
@@ -329,7 +329,7 @@ function GetFweetsExample3(client) {
 // eslint-disable-next-line no-unused-vars
 function GetFweetsWithUsersJoinExample1(client) {
   return client
-    .query(Paginate(Join(Documents(Collection('accounts')), Index('fweets_by_author_simple'))))
+    .query(Paginate(Join(Documents(Collection('accounts')), FaunaIndex('fweets_by_author_simple'))))
     .then(res => flattenDataKeys(res))
     .catch(err => {
       console.log(err)
@@ -346,7 +346,7 @@ function GetFweetsWithUsersJoinExample1(client) {
 // eslint-disable-next-line no-unused-vars
 function GetFweetsWithUsersJoinExample2(client, email) {
   return client
-    .query(Paginate(Join(Match(Index('accounts_by_email'), email), Index('fweets_by_author_simple'))))
+    .query(Paginate(Join(Match(FaunaIndex('accounts_by_email'), email), FaunaIndex('fweets_by_author_simple'))))
     .then(res => flattenDataKeys(res))
     .catch(err => {
       console.log(err)
@@ -364,17 +364,17 @@ function GetFweetsWithUsersJoinExample2(client, email) {
 function GetFweets(client) {
   const FQLStatement = GetFweetsWithUsersMapGetGeneric(
     // Since we start of here with followerstats index (a ref we don't need afterwards, we can use join here!)
-    q.Map(
+    Map(
       Paginate(
         Join(
           // the index takes one term, the user that is browsing our app
-          Match(Index('followerstats_by_user_popularity'), Select(['data', 'user'], Get(Identity()))),
+          Match(FaunaIndex('followerstats_by_user_popularity'), Select(['data', 'user'], Get(Identity()))),
           // Join can also take a lambda,
           // and we have to use a lambda since our index returns more than one variable.
           // Our index again contains two values (the score and the author ref), so takes an array of two values
           // We only care about the author ref which we will feed into the fweets_by_author index,
           // to get fweet references. Added advantage, because we use a join here we can let the index sort as well ;).
-          Lambda(['fweetscore', 'authorRef'], Match(Index('fweets_by_author'), Var('authorRef')))
+          Lambda(['fweetscore', 'authorRef'], Match(FaunaIndex('fweets_by_author'), Var('authorRef')))
         )
       ),
       // the created time has served its purpose for sorting.
@@ -390,7 +390,7 @@ function GetFweets(client) {
 }
 
 function getFweets(client) {
-  return client.query(Call(q.Function('get_fweets'))).then(res => flattenDataKeys(res))
+  return client.query(Call(FaunaFunction('get_fweets'))).then(res => flattenDataKeys(res))
 }
 
 function GetFweetsByTag(tagName) {
@@ -398,11 +398,11 @@ function GetFweetsByTag(tagName) {
     {
       // We only receive the tag name, not reference (since this is passed through the URL, a ref would be ugly in the url right?)
       // So let's get the tag, we assume that it still exists (if not Get will error but that is fine for our use case)
-      tagReference: Select([0], Paginate(Match(Index('hashtags_by_name'), tagName))),
+      tagReference: Select([0], Paginate(Match(FaunaIndex('hashtags_by_name'), tagName))),
       res: GetFweetsWithUsersMapGetGeneric(
         // Since we start of here with followerstats index (a ref we don't need afterwards, we can use join here!)
-        q.Map(
-          Paginate(Match(Index('fweets_by_tag'), Var('tagReference'))),
+        Map(
+          Paginate(Match(FaunaIndex('fweets_by_tag'), Var('tagReference'))),
           Lambda(['fweetscore', 'fweetRef'], Var('fweetRef'))
         )
       )
@@ -414,7 +414,7 @@ function GetFweetsByTag(tagName) {
 }
 
 function getFweetsByTag(client, tag) {
-  return client.query(Call(q.Function('get_fweets_by_tag'), tag)).then(res => flattenDataKeys(res))
+  return client.query(Call(FaunaFunction('get_fweets_by_tag'), tag)).then(res => flattenDataKeys(res))
 }
 
 function GetFweetsByAuthor(authorAlias) {
@@ -422,12 +422,12 @@ function GetFweetsByAuthor(authorAlias) {
     {
       // We only receive the userAlias, not reference (since this is passed through the URL, a ref would be ugly in the url right?)
       // So let's get the user, we assume that it still exists (if not Get will error but that is fine for our use case)
-      authorReference: Select([0], Paginate(Match(Index('users_by_alias'), authorAlias))),
+      authorReference: Select([0], Paginate(Match(FaunaIndex('users_by_alias'), authorAlias))),
       results: GetFweetsWithUsersMapGetGeneric(
         // When we look at the feed of fweets of a certain user, we are just going to order them
         // Chronologically.
-        q.Map(
-          Paginate(Match(Index('fweets_by_author'), Var('authorReference'))),
+        Map(
+          Paginate(Match(FaunaIndex('fweets_by_author'), Var('authorReference'))),
           // The index contains two values so our lambda also takes two values.
           Lambda(['createdtime', 'ref'], Var('ref'))
         )
@@ -440,7 +440,7 @@ function GetFweetsByAuthor(authorAlias) {
 }
 
 function getFweetsByAuthor(client, authorAlias) {
-  return client.query(Call(q.Function('get_fweets_by_author'), authorAlias)).then(res => flattenDataKeys(res))
+  return client.query(Call(FaunaFunction('get_fweets_by_author'), authorAlias)).then(res => flattenDataKeys(res))
 }
 
 /* Get fweets and the user that is the author of the message.
@@ -450,7 +450,7 @@ function getFweetsByAuthor(client, authorAlias) {
 
 function GetFweetsWithUsersMapGetGeneric(TweetsSetRefOrArray, depth = 1) {
   // Let's do this with a let to clearly show the separate steps.
-  return q.Map(
+  return Map(
     TweetsSetRefOrArray, // for all tweets this is just Paginate(Documents(Collection('fweets'))), else it's a match on an index
     Lambda(ref =>
       Let(
@@ -478,19 +478,19 @@ function GetFweetsWithUsersMapGetGeneric(TweetsSetRefOrArray, depth = 1) {
           // Get the original fweet
           // Get the statistics for the fweet
           fweetstatsMatch: Match(
-            Index('fweetstats_by_user_and_fweet'),
+            FaunaIndex('fweetstats_by_user_and_fweet'),
             Var('currentUserRef'),
             Select(['ref'], Var('fweet'))
           ),
           followerstatisticsMatch: Match(
-            Index('followerstats_by_author_and_follower'),
+            FaunaIndex('followerstats_by_author_and_follower'),
             Var('currentUserRef'),
             Select(['ref'], Var('fweet'))
           ),
           fweetstats: If(Exists(Var('fweetstatsMatch')), Get(Var('fweetstatsMatch')), {}),
           // Get comments, index has two values so lambda has two values
-          comments: q.Map(
-            Paginate(Match(Index('comments_by_fweet_ordered'), Var('ref'))),
+          comments: Map(
+            Paginate(Match(FaunaIndex('comments_by_fweet_ordered'), Var('ref'))),
             Lambda(
               ['ts', 'commentref'],
               Let(

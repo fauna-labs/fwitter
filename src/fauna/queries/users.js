@@ -1,7 +1,4 @@
-import faunadb from 'faunadb'
-
-const q = faunadb.query
-const { Create, Collection, Update, Let, Get, Identity, Var, Select } = q
+import { Create, Collection, Update, Let, Get, Identity, Var, Select } from 'faunadb/query'
 
 function CreateUser(name, alias, icon) {
   return Create(Collection('users'), {
