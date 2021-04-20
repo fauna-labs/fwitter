@@ -52,7 +52,7 @@ const handleRegister = (event, username, password, alias, name, sessionContext, 
 const Register = () => {
   const history = useHistory()
   const sessionContext = useContext(SessionContext)
-  return ( 
+  return (
     <Form
       isLogin={false}
       handleSubmit={(event, username, password, alias, name) =>
