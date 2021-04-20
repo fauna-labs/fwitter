@@ -55,10 +55,7 @@ const main = async () => {
   let client = new faunadb.Client({ secret: adminKey })
 
   if (typeof childDbName !== 'undefined' && childDbName !== '') {
-    await handleSetupError(
-      client.query(If(Exists(Database(childDbName)), false, CreateDatabase({ name: childDbName }))),
-      'database - create child database'
-    )
+    await handleSetupError(client.query(CreateDatabase({ name: childDbName })), 'database - create child database')
     const key = await handleSetupError(
       client.query(CreateKey({ database: Database(childDbName), role: 'admin' })),
       'Admin key - child db'
