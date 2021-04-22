@@ -1,7 +1,8 @@
 {
-  "name": "professional-network",
+  "name": "fwitter",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT-0",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
