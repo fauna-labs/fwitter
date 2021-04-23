@@ -55,7 +55,7 @@
     "envfile": "^5.0.0",
     "eslint": "^7.24.0",
     "eslint-config-idiomatic": "^4.0.0",
-    "eslint-config-prettier": "^6.10.0",
+    "eslint-config-prettier": "^8.2.0",
     "eslint-config-prettier-standard": "^3.0.1",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.20.1",
