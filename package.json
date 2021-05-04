@@ -4,7 +4,7 @@
   "private": true,
   "license": "MIT-0",
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.27",
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.9",
     "@testing-library/jest-dom": "^5.12.0",
