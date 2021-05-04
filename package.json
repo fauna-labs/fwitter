@@ -67,7 +67,7 @@
     "eslint-plugin-standard": "^5.0.0",
     "prettier": "2.2.1",
     "prettier-config-standard": "^1.0.1",
-    "stylelint-config-prettier": "^8.0.1",
+    "stylelint-config-prettier": "^8.0.2",
     "stylelint-prettier": "^1.2.0"
   }
 }
