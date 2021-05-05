@@ -10,7 +10,7 @@
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^7.1.2",
-    "cloudinary-react": "^1.3.4",
+    "cloudinary-react": "^1.7.0",
     "custom-env": "^1.0.2",
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
