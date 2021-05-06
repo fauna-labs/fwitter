@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "envfile": "^5.2.0",
-    "eslint": "^7.24.0",
+    "eslint": "^7.25.0",
     "eslint-config-idiomatic": "^4.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-prettier-standard": "^3.0.1",
