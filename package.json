@@ -6,7 +6,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@fortawesome/react-fontawesome": "^0.1.9",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^7.1.2",
@@ -52,7 +52,7 @@
     ]
   },
   "devDependencies": {
-    "envfile": "^6.14.0",
+    "envfile": "^5.2.0",
     "eslint": "^7.24.0",
     "eslint-config-idiomatic": "^4.0.0",
     "eslint-config-prettier": "^8.3.0",
