@@ -20,7 +20,7 @@ const {
   Match,
   Get,
   Index,
-  Identify,
+  CurrentIdentity,
   Do,
   Delete,
   ContainsStrRegex,
@@ -193,10 +193,10 @@ function LoginAccountExample2(email, password) {
  * First version, can we use our AddRateLimiting function here?
  * We can but it will also rate-limit succesful logins and that is not the exact goal here.
  * The rate-limiting identifier is here based on the e-mail
- * instead of the Identity() since there is no Identity() yet. Identity becomes available when you use a
+ * instead of the CurrentIdentity() since there is no CurrentIdentity() yet. Identity becomes available when you use a
  * token retrieves via Login or by Creating a token with Create(Tokens(), { instance: <ref to database instance> })
  * in which case the 'instance' becomes the Identity. Tip:
- * you could use 'HasIdentity()' to safely check whether there is an Identitity if necessary.
+ * you could use 'HasCurrentIdentity()' to safely check whether there is an Identitity if necessary.
  *
  * See the last example for the better version.
  **/

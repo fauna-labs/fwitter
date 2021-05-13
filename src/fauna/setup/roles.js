@@ -19,7 +19,7 @@ const {
   Union,
   Query,
   Let,
-  Identity,
+  CurrentIdentity,
   Equals,
   Get
 } = q
@@ -262,14 +262,14 @@ const CreateLoggedInRole = CreateOrUpdateRole({
     },
     // ------To Update profiles -------
     // Updating profiles was deliberately done via roles as an example
-    // But could just as well be placed in a UDF and rely on Identity()
+    // But could just as well be placed in a UDF and rely on CurrentIdentity()
     {
       // First we will get the users via the account so we need to be able
-      // to get the account (which we will get via Identity())
+      // to get the account (which we will get via CurrentIdentity())
       resource: Collection('accounts'),
       actions: {
         // A read privilege function receives the reference that is to be read!
-        read: Query(Lambda('ref', Equals(Identity(), Var('ref'))))
+        read: Query(Lambda('ref', Equals(CurrentIdentity(), Var('ref'))))
       }
     },
     {
@@ -287,8 +287,8 @@ const CreateLoggedInRole = CreateOrUpdateRole({
             Let(
               {
                 // the reference of the user that tries to access
-                // (retrieved via the account ref that comes out of Identity())
-                loggedInUserRef: Select(['data', 'user'], Get(Identity()))
+                // (retrieved via the account ref that comes out of CurrentIdentity())
+                loggedInUserRef: Select(['data', 'user'], Get(CurrentIdentity()))
               },
               Equals(Var('loggedInUserRef'), Var('ref'))
             )

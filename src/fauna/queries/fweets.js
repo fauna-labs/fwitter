@@ -8,7 +8,7 @@ const {
   Call,
   Create,
   Collection,
-  Identity,
+  CurrentIdentity,
   Paginate,
   Documents,
   Lambda,
@@ -40,7 +40,7 @@ function CreateFweet(message, tags, asset) {
       newFweet: Create(Collection('fweets'), {
         data: {
           message: message,
-          author: Select(['data', 'user'], Get(Identity())),
+          author: Select(['data', 'user'], Get(CurrentIdentity())),
           hashtags: Var('hashtagrefs'),
           asset: asset,
           likes: 0,
@@ -57,7 +57,7 @@ function CreateFweet(message, tags, asset) {
     Var('fweetWithUserAndAccount')
   )
 
-  return AddRateLimiting('create_fweet', FQLStatement, Identity())
+  return AddRateLimiting('create_fweet', FQLStatement, CurrentIdentity())
 }
 
 /* LikeFweet will be used to create a user defined function
@@ -65,7 +65,7 @@ function CreateFweet(message, tags, asset) {
 function LikeFweet(fweetRef) {
   return Let(
     {
-      account: Get(Identity()),
+      account: Get(CurrentIdentity()),
       userRef: Select(['data', 'user'], Var('account')),
       fweetStatisticsRef: Match(Index('fweetstats_by_user_and_fweet'), Var('userRef'), fweetRef),
       fweet: Get(fweetRef),
@@ -137,7 +137,7 @@ function Refweet(fweetRef, message, tags) {
   return Let(
     {
       // Get current fweet statistics
-      account: Get(Identity()),
+      account: Get(CurrentIdentity()),
       userRef: Select(['data', 'user'], Var('account')),
       fweet: Get(fweetRef),
       authorRef: Select(['data', 'author'], Var('fweet')),
@@ -178,7 +178,7 @@ function Refweet(fweetRef, message, tags) {
             data: {
               original: fweetRef,
               // author of the refweet, not of the fweet
-              author: Select(['data', 'user'], Get(Identity())),
+              author: Select(['data', 'user'], Get(CurrentIdentity())),
               message: message,
               hashtags: tags,
               likes: 0,
@@ -219,7 +219,7 @@ function Refweet(fweetRef, message, tags) {
 function Comment(fweetRef, message) {
   return Let(
     {
-      account: Get(Identity()),
+      account: Get(CurrentIdentity()),
       userRef: Select(['data', 'user'], Var('account')),
       fweetStatisticsRef: Match(Index('fweetstats_by_user_and_fweet'), Var('userRef'), fweetRef),
       fweetStatistics: If(
@@ -242,7 +242,7 @@ function Comment(fweetRef, message) {
       comment: Create(Collection('comments'), {
         data: {
           message: message,
-          author: Select(['data', 'user'], Get(Identity())),
+          author: Select(['data', 'user'], Get(CurrentIdentity())),
           fweet: fweetRef
         }
       }),
@@ -368,7 +368,7 @@ function GetFweets(client) {
       Paginate(
         Join(
           // the index takes one term, the user that is browsing our app
-          Match(Index('followerstats_by_user_popularity'), Select(['data', 'user'], Get(Identity()))),
+          Match(Index('followerstats_by_user_popularity'), Select(['data', 'user'], Get(CurrentIdentity()))),
           // Join can also take a lambda,
           // and we have to use a lambda since our index returns more than one variable.
           // Our index again contains two values (the score and the author ref), so takes an array of two values
@@ -386,7 +386,7 @@ function GetFweets(client) {
   // To discourage that people start 'crawling' fwitter, we can rate-limit it.
   // Reads will be charged since Fauna reads optimistically
   // still help though to discourage people to start crawling your API.
-  return AddRateLimiting('get_fweets', FQLStatement, Identity())
+  return AddRateLimiting('get_fweets', FQLStatement, CurrentIdentity())
 }
 
 function getFweets(client) {
@@ -410,7 +410,7 @@ function GetFweetsByTag(tagName) {
     Var('res')
   )
 
-  return AddRateLimiting('get_fweets_by_tag', FQLStatement, Identity())
+  return AddRateLimiting('get_fweets_by_tag', FQLStatement, CurrentIdentity())
 }
 
 function getFweetsByTag(client, tag) {
@@ -436,7 +436,7 @@ function GetFweetsByAuthor(authorAlias) {
     Var('results')
   )
 
-  return AddRateLimiting('get_fweets_by_author', FQLStatement, Identity())
+  return AddRateLimiting('get_fweets_by_author', FQLStatement, CurrentIdentity())
 }
 
 function getFweetsByAuthor(client, authorAlias) {
@@ -472,7 +472,7 @@ function GetFweetsWithUsersMapGetGeneric(TweetsSetRefOrArray, depth = 1) {
           // Get the user that wrote the fweet.
           user: Get(Select(['data', 'author'], Var('fweet'))),
           // Get the account via identity
-          account: Get(Identity()),
+          account: Get(CurrentIdentity()),
           // Get the user that is currently logged in.
           currentUserRef: Select(['data', 'user'], Var('account')),
           // Get the original fweet

@@ -12,7 +12,7 @@ import { RegisterWithUser, RegisterAccount, LoginAccount, LoginAccountExample1 }
 
 const faunadb = require('faunadb')
 const q = faunadb.query
-const { Var, Query, Lambda, Exists, If, Update, Select, Get, CreateFunction, Role, Identity } = q
+const { Var, Query, Lambda, Exists, If, Update, Select, Get, CreateFunction, Role, CurrentIdentity } = q
 
 // A convenience function to either create or update a function.
 function CreateOrUpdateFunction(obj) {
@@ -143,7 +143,7 @@ const GetFweetsByTagUDF = CreateOrUpdateFunction({
 
 const FollowUDF = CreateOrUpdateFunction({
   name: 'follow',
-  body: Query(Lambda(['authorRef'], Follow(Var('authorRef'), Select(['data', 'user'], Get(Identity()))))),
+  body: Query(Lambda(['authorRef'], Follow(Var('authorRef'), Select(['data', 'user'], Get(CurrentIdentity()))))),
   role: Role('functionrole_manipulate_fweets')
 })
 
