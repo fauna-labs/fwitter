@@ -30,7 +30,7 @@ This app was created with Create React App, to start using it we need to:
 
 To set up the project, go to the [FaunaDB Dashboard](https://dashboard.fauna.com/) and sign up. 
 
-<img src="https://github.com/fauna-brecht/fwitter/blob/main/readme/sign_up.png?raw=true" width="600">
+<img src="readme/sign_up.png?raw=true" width="600">
 
 Once you are in the dashboard, click on New Database, fill in a name, and click Save. 
 <img src="https://github.com/fauna-brecht/fwitter/blob/main/readme/new_database.png?raw=true" width="600">
