@@ -1,3 +1,5 @@
+@use "sass:math";
+
 .search-and-results-container {
   display: flex;
   width: 25%;
@@ -26,7 +28,7 @@
   background: $soft-white;
   border-radius: $border-radius-round;
   margin: $grid-unit 0 0 0;
-  padding: $grid-unit/1.5 $grid-unit/1.5;
+  padding: math.div($grid-unit, 1.5) math.div($grid-unit, 1.5);
   border: 1px solid $soft-border;
 }
 
@@ -55,7 +57,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: $grid-unit/4 0;
+  margin: math.div($grid-unit, 4) 0;
 }
 
 .search-results-title {
@@ -63,7 +65,7 @@
   font-weight: normal;
   font-size: 18px;
   align-items: center;
-  margin-bottom: $grid-unit / 2;
+  margin-bottom: math.div($grid-unit, 2);
 }
 
 .search-result-name-and-alias {

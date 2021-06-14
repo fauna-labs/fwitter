@@ -1,4 +1,6 @@
 
+@use "sass:math";
+
 .fweeter {
   background: $soft-white;
   border-radius: $border-radius-round;
@@ -20,7 +22,7 @@
   width: 100%;
   border: 0px;
   font-size: 20px;
-  padding: $grid-unit/2 0 $grid-unit/2 $grid-unit/2;
+  padding: math.div($grid-unit, 2) 0 math.div($grid-unit, 2) math.div($grid-unit, 2);
 }
 
 .fweeter .fweet-card-text-container {
@@ -31,7 +33,7 @@
 
 .fweeter .fweet-card-actions {
   justify-content: flex-end;
-  padding: $grid-unit/2 $grid-unit $grid-unit 0;
+  padding: math.div($grid-unit, 2) $grid-unit $grid-unit 0;
 }
 
 .fweeter .fweet-card-actions .icon {

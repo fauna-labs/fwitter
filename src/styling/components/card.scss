@@ -1,5 +1,7 @@
+@use "sass:math";
+
 .fweet-card-container {
-    padding: $grid-unit/2 0;
+    padding: math.div($grid-unit, 2) 0;
     
     display: flex;
     flex: 0 0 auto;
@@ -13,14 +15,14 @@
     display: flex;
     flex-direction: row;
     background: $soft-white;
-    padding: $grid-unit/2 $grid-unit $grid-unit/4 $grid-unit;
+    padding: math.div($grid-unit, 2) $grid-unit math.div($grid-unit, 4) $grid-unit;
     border: 1px solid $soft-border
 }
 
 .fweet-card-main {
     display: flex;
     flex-direction: column;
-    padding: 0 $grid-unit/2;
+    padding: 0 math.div($grid-unit, 2);
     width: calc(100% - #{$grid-unit});
 }
 
@@ -71,7 +73,7 @@
     align-items: center;
     height: $touch-target;
     width: $touch-target;
-    margin: 0 $grid-unit 0 $grid-unit/2;
+    margin: 0 $grid-unit 0 math.div($grid-unit, 2);
     cursor: pointer;
 }
 
@@ -142,11 +144,11 @@
     display: block;
     flex-direction: column;
     justify-content: center;
-    padding: $grid-unit/2 0;
+    padding: math.div($grid-unit, 2) 0;
 }
 
 .fweet-card-text.refweet {
-    padding: $grid-unit / 2;
+    padding: math.div($grid-unit, 2);
     background-color: $soft-shade;
 }
 
@@ -155,8 +157,8 @@
 }
 
 .fweet-card-text.comment {
-    padding: 0 $grid-unit/2;
-    margin: $grid-unit/2 0 $grid-unit $grid-unit;
+    padding: 0 math.div($grid-unit, 2);
+    margin: math.div($grid-unit, 2) 0 $grid-unit $grid-unit;
     border-left: 2px solid $wisteria;
     background: $soft-white;
     border-radius: $border-radius-round;
@@ -166,11 +168,11 @@
 }
 
 .fweet-card-text.comment:first-child {
-    margin-top: $grid-unit/2; 
+    margin-top: math.div($grid-unit, 2); 
 }
 
 .fweet-card-text.comment:last-child {
-    margin-bottom: $grid-unit/2; 
+    margin-bottom: math.div($grid-unit, 2); 
 }
 
 .fweet-description {

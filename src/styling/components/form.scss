@@ -1,3 +1,5 @@
+@use "sass:math";
+
 .account-form-container {
     display: flex;
     justify-content: center;
@@ -43,7 +45,7 @@ input.input-row-column {
 input[type="submit"], input[type="file"], input[type="text"], input[type="password"], input:not([type]), select, textarea {
     border: 1px solid $soft-border;
     height: $touch-target;
-    padding: $grid-unit/1.5;
+    padding: math.div($grid-unit, 1.5);
     border-radius: $border-radius-round;
     outline: none;
     font-size: 15px;

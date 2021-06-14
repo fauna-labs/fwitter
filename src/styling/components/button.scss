@@ -1,3 +1,5 @@
+@use "sass:math";
+
 button {
     border-radius: $border-radius;
     border: none;
@@ -7,7 +9,7 @@ button {
     color: white;
     text-decoration: none;
     background: $bluebright;
-    padding: 0 $grid-unit/1.5;
+    padding: 0 math.div($grid-unit, 1.5);
     text-transform: uppercase;
     text-shadow: 0px 1px 0px rgba(0,0,0,0.2);
 }
