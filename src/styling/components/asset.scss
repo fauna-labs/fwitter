@@ -1,3 +1,5 @@
+@use "sass:math";
+
 .fweet-asset {
   display: flex;
   flex-direction: column;
@@ -8,7 +10,7 @@
 
 .fweet-asset img {
   background-color: white;
-  margin: 0 0 $grid-unit/1.5 0;
+  margin: 0 0 math.div($grid-unit, 1.5) 0;
   max-height: 400px;
   max-width: 100%;
 

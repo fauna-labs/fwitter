@@ -18,7 +18,7 @@ A few features are still missing and will be covered in future articles, includi
 
 
 ## Pre-requisites
-This app requires Node.js version 14 (LTS) or 15. It relies on [node-sass](https://github.com/sass/node-sass), which currently [does not support Node.js version 16](https://github.com/sass/node-sass/issues/3077).
+This app requires Node.js version 14 (LTS) or later.
 
 ## Setup the project
 This app was created with Create React App, to start using it we need to: 
