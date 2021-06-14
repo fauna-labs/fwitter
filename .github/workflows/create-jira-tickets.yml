@@ -48,7 +48,7 @@ jobs:
           issuetype: ${{steps.event.outputs.ISSUE_TYPE}}
           summary: ${{steps.event.outputs.SUMMARY}}
           description: ${{steps.event.outputs.DESC}}
-          fields: '{"labels": ["github", "${{steps.event.outputs.LABEL}}"], "customfield_10135": "serverless-fauna"}'
+          fields: '{"labels": ["github", "${{steps.event.outputs.LABEL}}"], "customfield_10135": "fwitter"}'
 
       - name: Set triage state
         if: ${{ steps.create.outputs.issue }}
