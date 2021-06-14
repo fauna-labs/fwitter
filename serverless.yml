@@ -1,0 +1,17 @@
+# Copyright Fauna, Inc.
+# SPDX-License-Identifier: MIT-0
+
+service: fwitter
+configValidationMode: error
+
+provider:
+  name: aws
+  region: us-east-2
+
+plugins:
+  - serverless-lift
+
+constructs:
+  fwitter-app:
+    type: static-website
+    path: build
