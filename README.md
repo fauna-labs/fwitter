@@ -1,32 +1,31 @@
 A full introduction to this project can be found in the [docs](https://docs.fauna.com/fauna/current/start/apps/fwitter.html). 
 
-This project is an example of how to a 'real-world' app with highly dynamic data in a serverless fashion using React hooks, FaunaDB, and Cloudinary. Since FaunaDB was developed by ex-Twitter engineers, a Twitter-like application felt like an appropriately sentimental choices so we call this serverless baby ‘Fwitter’. 
+This project is an example of how to build a 'real-world' app with highly dynamic data in a serverless fashion using React hooks and FaunaDB. Since FaunaDB was developed by ex-Twitter engineers, a Twitter-like application felt like an appropriately sentimental choice, and we call this serverless baby ‘Fwitter’. 
 
 <img src="https://github.com/fauna-brecht/fwitter/blob/main/readme/fwitter.png?raw=true" width="600">
 
 There is a first [CSS-tricks article](https://css-tricks.com/rethinking-twitter-as-a-serverless-app/) that describes the application in general, explains auth, data modeling and simple queries and brushes over the other features. 
-More articles are coming on the [Fauna blog](https://fauna.com/blog) and/or CSS Tricks
-
+More articles are coming on the [Fauna blog](https://fauna.com/blog) and/or CSS Tricks.
 
 It uses the Fauna Query Language (FQL) and starts with a frontend-only approach that directly accesses the serverless database FaunaDB for data storage, authentication, and authorization. 
 
-<img src="https://github.com/fauna-brecht/fwitter/blob/main/readme/stack1.png?raw=true" width="400">
+<img src="readme/stack1.png?raw=true" width="400">
 
 A few features are still missing and will be covered in future articles, including streaming, pagination, benchmarks, and a more advanced security model with short-lived tokens, JWT tokens, single sign-on (possibly using a service like Auth0), IP-based rate limiting (with Cloudflare workers), e-mail verification (with a service like SendGrid), and HttpOnly cookies.
 
-<img src="https://github.com/fauna-brecht/fwitter/blob/main/readme/stack2.png?raw=true" width="400">
+<img src="stack2.png?raw=true" width="400">
 
 
-## Pre-requisites
+## Prerequisites
 This app requires Node.js version 14 (LTS) or later.
 
-## Setup the project
-This app was created with Create React App, to start using it we need to: 
+## Set up the project
+This app was created with Create React App. To start using it we need to: 
 
 ### Install npm packages
 `npm install`
 
-### Setup the database
+### Set up the database
 
 To set up the project, go to the [FaunaDB Dashboard](https://dashboard.fauna.com/) and sign up. 
 
@@ -68,13 +67,13 @@ REACT_APP_LOCAL___BOOTSTRAP_FAUNADB_KEY=<insert faunadb bootstrap key>
 ```
 
 ### Populate the database (optional)
-We also provided a script that adds some data to the database (accounts, users, fweets, comments, likes, etc..) for you to play around with, it will use or ask the same admin key.
+We also provide a script that adds some data to the database (accounts, users, fweets, comments, likes, etc..) for you to play around with. It will use or ask for the same admin key.
 
 ```
 npm run populate
 ```
 
-Once you do, you will get 4 users to login with: 
+Once you do, you will get four users to login with: 
 - user1@test.com
 - user2@test.com
 - user3@test.com
@@ -82,18 +81,10 @@ Once you do, you will get 4 users to login with:
 
 all with password: 'testtest'
 
-If you do not see a lot on the feed yet of the user you logged in with, search for another user (type in a letter such as 'b' or 'a') and click the + sign to follow him/her.
-
-### Setup cloudinary. 
-
-We use [Cloudinary](https://cloudinary.com/) to allow users to upload media, automatically optimise and serve this media which will be linked to the data of our application such as video and images. It's truly quite amazing what Cloudinary does behind the scenes. To see this feature in action, create an account with Cloudinary and add your cloudname and a public template (there is a default template called ‘ml_default’ which you can make public) to the environment. 
-```
-REACT_APP_LOCAL___CLOUDINARY_CLOUDNAME=<cloudinary cloudname>
-REACT_APP_LOCAL___CLOUDINARY_TEMPLATE=<cloudinary template>
-```
+If you do not see a lot on the feed of the user you logged in with, search for another user (type in a letter such as 'b' or 'a') and click the + sign to follow him/her.
 
 ## Run the project
-This project has been created with [Create React App](https://reactjs.org/docs/create-a-new-react-app.html#create-react-app)and therefore has the same familiar commands such as 
+This project has been created with [Create React App](https://reactjs.org/docs/create-a-new-react-app.html#create-react-app) and therefore has the same familiar commands:
 
 `npm start`
 
@@ -101,7 +92,7 @@ to start your application.
 
 ### Update something in the setup
 What if I am experimenting and want to update something? 
-To update User Defined Functions or Roles you can just alter the definition and run `npm run setup` again, it will verify whether the role/function exists and override it.
+To update User Defined Functions or Roles you can just alter the definition and run `npm run setup` again. It will verify whether the role/function exists and override it.
 
 One thing that can't be altered just like that are indexes (makes sense of course, they could contain quite some data). 
-In order to just setup from scratch again you can run `npm run destroy` followed by `npm run setup`. Note, that since names such as collections and indexes are cached, you will have to wait +-60 secs but we can easily get around that by just removing and adding the complete database. In that case, we would remove our ADMIN key as well which would mean that we have to generate a new one each time. However, if we just create an admin key and use that to add (on setup) and remove (on destroy) a child database, than we can get around that inconvenience. We have provided you with that option. When you add the environment variable 'REACT_APP_LOCAL___CHILD_DB_NAME', the script will create a child database on `npm run setup` and destroy it on `npm run destroy` instead of removing all collections/indices/functions. 
+In order to just set up from scratch again you can run `npm run destroy` followed by `npm run setup`. Note, that since names such as collections and indexes are cached, you will have to wait +-60 secs but we can easily get around that by just removing and adding the complete database. In that case, we would remove our ADMIN key as well which would mean that we have to generate a new one each time. However, if we just create an admin key and use that to add (on setup) and remove (on destroy) a child database, than we can get around that inconvenience. We have provided you with that option. When you add the environment variable 'REACT_APP_LOCAL___CHILD_DB_NAME', the script will create a child database on `npm run setup` and destroy it on `npm run destroy` instead of removing all collections/indexes/functions. 
