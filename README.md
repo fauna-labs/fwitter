@@ -13,7 +13,7 @@ It uses the Fauna Query Language (FQL) and starts with a frontend-only approach 
 
 A few features are still missing and will be covered in future articles, including streaming, pagination, benchmarks, and a more advanced security model with short-lived tokens, JWT tokens, single sign-on (possibly using a service like Auth0), IP-based rate limiting (with Cloudflare workers), e-mail verification (with a service like SendGrid), and HttpOnly cookies.
 
-<img src="stack2.png?raw=true" width="400">
+<img src="readme/stack2.png?raw=true" width="400">
 
 
 ## Prerequisites
