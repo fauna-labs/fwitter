@@ -108,7 +108,8 @@ function LikeFweet(fweetRef) {
             fweet: fweetRef,
             like: Var('newLikeStatus'),
             refweet: false,
-            comment: false
+            comment: false,
+            created: Now()
           }
         })
       ),
@@ -170,7 +171,8 @@ function Refweet(fweetRef, message, tags) {
                 fweet: fweetRef,
                 like: false,
                 refweet: true,
-                comment: false
+                comment: false,
+                created: Now()
               }
             })
           ),
@@ -235,7 +237,8 @@ function Comment(fweetRef, message) {
             fweet: fweetRef,
             like: false,
             refweet: false,
-            comment: true
+            comment: true,
+            created: Now()
           }
         })
       ),

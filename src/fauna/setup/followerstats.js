@@ -72,7 +72,7 @@ const CreateIndexByUserPopularity = CreateIndex({
                 refweetsfactor: 1,
                 postlikes: Select(['data', 'postlikes'], Var('stats')),
                 postrefweets: Select(['data', 'postrefweets'], Var('stats')),
-                txtime: Now(),
+                txtime: Select(['data', 'created'], Var('stats')),
                 unixstarttime: Time('1970-01-01T00:00:00+00:00'),
                 ageInSecsSinceUnix: TimeDiff(Var('unixstarttime'), Var('txtime'), 'minutes')
               },
