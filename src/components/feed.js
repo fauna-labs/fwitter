@@ -88,7 +88,7 @@ const Feed = props => {
   }
 
   const handleLike = fweetAndUser => {
-    // we only need to pass the user, the liker can be identified with the FaunaDB Identity() function.
+    // we only need to pass the user, the liker can be identified with the FaunaDB CurrentIdentity() function.
     // Trying to make any other user like a fweet should be blocked via security rules.
     // In this application we will use an ABAC rule to do that. You could also opt to
     // group this logic in a UDF function to make sure that the user can't do anything else.

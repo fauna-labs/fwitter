@@ -1,7 +1,7 @@
 import faunadb from 'faunadb'
 
 const q = faunadb.query
-const { Create, Collection, Update, Let, Get, Identity, Var, Select } = q
+const { Create, Collection, Update, Let, Get, CurrentIdentity, Var, Select } = q
 
 function CreateUser(name, alias, icon) {
   return Create(Collection('users'), {
@@ -14,7 +14,7 @@ function CreateUser(name, alias, icon) {
 }
 
 /* We could place this function as well in a UDF and just derive the user to update from
- * the Identity() which we do not need to pass as a paramter.
+ * the CurrentIdentity() which we do not need to pass as a paramter.
  * Instead, shows a different approach, security via Roles.
  */
 
@@ -22,7 +22,7 @@ function UpdateUser(name, alias, icon) {
   console.log('updating', name, alias, icon)
   return Let(
     {
-      accountRef: Identity(),
+      accountRef: CurrentIdentity(),
       userRef: Select(['data', 'user'], Get(Var('accountRef')))
     },
     Update(Var('userRef'), {

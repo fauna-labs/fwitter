@@ -26,7 +26,7 @@ import { AddRateLimiting } from './rate-limiting'
 //    we would advice to add cloudflare workers in between (example upcoming)
 
 const q = faunadb.query
-const { Add, Identity, Paginate, IsEmpty, Let, If, Match, Index, Var, Delete, Select } = q
+const { Add, CurrentIdentity, Paginate, IsEmpty, Let, If, Match, Index, Var, Delete, Select } = q
 let adminClient = null
 // Setup indexes and collections
 beforeAll(async () => {
@@ -74,7 +74,7 @@ it('We can rate-limit functions on identity and call them within the limit', fun
     })
     .then(() => {
       // For testing, Let's just take a function.
-      const RateLimitedSillySum = AddRateLimiting('silly_sum', Add(2, 3), Identity(), 2, 60000)
+      const RateLimitedSillySum = AddRateLimiting('silly_sum', Add(2, 3), CurrentIdentity(), 2, 60000)
       return loggedInClient.query(RateLimitedSillySum)
     })
     .then(res => expect(res).toBe(5))
@@ -89,7 +89,7 @@ it('Edge case, we can call exactly the limit amount of items', function() {
   // That can not be called more than twice per minute
   let loggedInClient = null
 
-  const RateLimitedSillySum = AddRateLimiting('silly_sum', Add(2, 3), Identity(), 2, 60000)
+  const RateLimitedSillySum = AddRateLimiting('silly_sum', Add(2, 3), CurrentIdentity(), 2, 60000)
   return login(adminClient, 'test@test.com', 'testtest')
     .then(res => {
       loggedInClient = new faunadb.Client({ secret: res.secret })
@@ -106,7 +106,7 @@ it('Edge case, we can call exactly the limit amount of items', function() {
 it('Rate limiting kicks in if we go over', function() {
   // For testing, Let's just take a very silly add function
   // That can not be called more than twice per time unit
-  const RateLimitedSillySum = AddRateLimiting('silly_sum', Add(2, 3), Identity(), 2, 60000)
+  const RateLimitedSillySum = AddRateLimiting('silly_sum', Add(2, 3), CurrentIdentity(), 2, 60000)
   let loggedInClient = null
 
   return expect(
@@ -123,7 +123,7 @@ it('Rate limiting kicks in if we go over', function() {
 it('Rate limiting is scoped per user since we added Identity', function() {
   let loggedInClient = null
 
-  const RateLimitedSillySum = AddRateLimiting('silly_sum', Add(2, 3), Identity(), 2, 5000)
+  const RateLimitedSillySum = AddRateLimiting('silly_sum', Add(2, 3), CurrentIdentity(), 2, 5000)
   return (
     login(adminClient, 'test@test.com', 'testtest')
       .then(res => {
@@ -172,7 +172,7 @@ it('We can rate-limit functions globally (e.g. for register) by providing a cons
 it('Everything is fine if we wait a while', function() {
   // For testing, Let's just take a very silly add function
   // That can not be called more than twice per minute
-  const RateLimitedSillySum = AddRateLimiting('silly_sum', Add(2, 3), Identity(), 2, 5000)
+  const RateLimitedSillySum = AddRateLimiting('silly_sum', Add(2, 3), CurrentIdentity(), 2, 5000)
   let loggedInClient = null
 
   return login(adminClient, 'test@test.com', 'testtest')
