@@ -1,4 +1,4 @@
-import faunadb from 'faunadb'
+import faunadb, {Identify} from 'faunadb'
 import { flattenDataKeys } from '../helpers/util'
 import { AddRateLimiting } from './rate-limiting'
 import { Follow } from './followers'
@@ -99,8 +99,8 @@ function RegisterExample3(email, password, name, alias, icon, rateLimiting = tru
   return rateLimiting ? AddRateLimiting('register', RegisterFQLStatement, 'global') : RegisterFQLStatement
 }
 
-/* Register Example4 - let's extend it to do e-mail validation 
-   And follow ourselves at the moment we create the user 
+/* Register Example4 - let's extend it to do e-mail validation
+   And follow ourselves at the moment we create the user
    since you only see the feed of the people you follow */
 function RegisterWithUser(email, password, name, alias, icon, rateLimiting = true) {
   // It's always a good idea to use If for such validations compared to Do since Do is not short-circuited at this point
@@ -207,7 +207,7 @@ function LoginAccountExample3(email, password) {
 
 /* Login Example 4 - Login with Rate-limiting only on faulty logins
 * We do not want to limit the amount of logins on a certain account in time
-* we only want to limit 'faulty logins' 
+* we only want to limit 'faulty logins'
 
 */
 
