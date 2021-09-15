@@ -1,5 +1,4 @@
 import faunadb from 'faunadb'
-
 import { registerWithUser, login, logout } from './queries/auth'
 import {
   createFweet,
@@ -21,22 +20,27 @@ import { follow } from './queries/followers'
  * The client will then be replaced with a client that uses the secret that was returned by Login.
  */
 
+// Add domain for this database (e.g. 'db.eu.fauna.com' or 'db.us.fauna.com')
+
+
 class QueryManager {
   constructor(token) {
     // A client is just a wrapper, it does not create a persitant connection
     // FaunaDB behaves like an API and will include the token on each request.
     this.headers = { 'X-Fauna-Source': 'fwitter-react' }
     this.bootstrapToken = token || process.env.REACT_APP_LOCAL___BOOTSTRAP_FAUNADB_KEY
+    this.domain = process.env.REACT_APP_LOCAL___DATABASE_DOMAIN || 'db.fauna.com'
     this.client = new faunadb.Client({
       headers: this.headers,
-      secret: token || this.bootstrapToken
+      secret: token || this.bootstrapToken,
+      domain: this.domain
     })
   }
 
   login(email, password) {
     return login(this.client, email, password).then(res => {
       if (res) {
-        this.client = new faunadb.Client({ headers: this.headers, secret: res.secret })
+        this.client = new faunadb.Client({ headers: this.headers, secret: res.secret, domain: this.domain })
       }
       return res
     })
@@ -47,7 +51,7 @@ class QueryManager {
     const icon = 'person' + (Math.round(Math.random() * 22) + 1)
     return registerWithUser(this.client, email, password, name, alias, icon).then(res => {
       if (res) {
-        this.client = new faunadb.Client({ headers: this.headers, secret: res.secret.secret })
+        this.client = new faunadb.Client({ headers: this.headers, secret: res.secret.secret, domain: this.domain })
       }
       return res
     })
@@ -57,7 +61,8 @@ class QueryManager {
     return logout(this.client).then(res => {
       this.client = new faunadb.Client({
         headers: this.headers,
-        secret: this.bootstrapToken
+        secret: this.bootstrapToken,
+        domain: this.domain
       })
       return res
     })
