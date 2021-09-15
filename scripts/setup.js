@@ -34,9 +34,9 @@ This script will (Do not worry! It will all do this for you):
 const main = async () => {
   // In order to set up a database, we need a admin key
   let adminKey = process.env.REACT_APP_LOCAL___ADMIN
-  // And a domain for this database
+  // And a domain for this database (e.g. 'db.eu.fauna.com' or 'db.us.fauna.com')
   const domain = process.env.REACT_APP_LOCAL___ADMIN_DOMAIN || 'db.fauna.com'
-  
+
   // If this option is provided, the db will be created as a child db of the database
   // that the above admin key belongs to. This is useful to destroy/recreate a database
   // easily without having to wait for cache invalidation of collection/index names.
@@ -54,7 +54,7 @@ const main = async () => {
     })
     console.log(explanation)
   }
-  let client = new faunadb.Client({ secret: adminKey, scheme: 'https', domain })
+  let client = new faunadb.Client({ secret: adminKey, domain })
 
   if (typeof childDbName !== 'undefined' && childDbName !== '') {
     await handleSetupError(client.query(CreateDatabase({ name: childDbName })), 'database - create child database')
