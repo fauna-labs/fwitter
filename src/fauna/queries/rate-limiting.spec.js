@@ -27,11 +27,10 @@ import { AddRateLimiting } from './rate-limiting'
 
 const q = faunadb.query
 const { Add, CurrentIdentity, Paginate, IsEmpty, Let, If, Match, Index, Var, Delete, Select } = q
-// A domain for this database (e.g. 'db.eu.fauna.com' or 'db.us.fauna.com')
-const domain = process.env.REACT_APP_LOCAL___DATABASE_DOMAIN || 'db.fauna.com'
 
 let adminClient = null
 const adminSecret = process.env.REACT_APP_TEST__ADMIN_KEY
+// A domain for this database (e.g. 'db.eu.fauna.com' or 'db.us.fauna.com')
 const domain = process.env.REACT_APP_TEST__DATABASE_DOMAIN || 'db.fauna.com'
 
 // Setup indexes and collections
@@ -39,13 +38,8 @@ beforeAll(async () => {
   try {
     // First create database to run this test in.
     adminClient = new faunadb.Client({
-<<<<<<< HEAD
       secret: adminSecret,
       domain: domain,
-=======
-      secret: process.env.REACT_APP_TEST__ADMIN_KEY,
-      domain
->>>>>>> 5409b2a01c6363263f9aad0b8c642d96f27d81f4
     })
     const secret = await handlePromiseError(
       deleteAndCreateDatabase(adminClient, 'ratelimiting-spec'),
@@ -54,11 +48,7 @@ beforeAll(async () => {
     // Scope key to the new database
     adminClient = new faunadb.Client({
       secret: secret,
-<<<<<<< HEAD
       domain: domain,
-=======
-      domain
->>>>>>> 5409b2a01c6363263f9aad0b8c642d96f27d81f4
     })
     // Setup the database for this test
     await handlePromiseError(setupDatabaseRateLimitingSpec(adminClient), 'Setup Database')
@@ -87,11 +77,7 @@ it('We can rate-limit functions on identity and call them within the limit', fun
 
   return login(adminClient, 'test@test.com', 'testtest')
     .then(res => {
-<<<<<<< HEAD
       loggedInClient = new faunadb.Client({ secret: res.secret, domain: domain })
-=======
-      loggedInClient = new faunadb.Client({ secret: res.secret, domain })
->>>>>>> 5409b2a01c6363263f9aad0b8c642d96f27d81f4
     })
     .then(() => {
       // For testing, Let's just take a function.
@@ -113,11 +99,7 @@ it('Edge case, we can call exactly the limit amount of items', function() {
   const RateLimitedSillySum = AddRateLimiting('silly_sum', Add(2, 3), CurrentIdentity(), 2, 60000)
   return login(adminClient, 'test@test.com', 'testtest')
     .then(res => {
-<<<<<<< HEAD
       loggedInClient = new faunadb.Client({ secret: res.secret, domain: domain })
-=======
-      loggedInClient = new faunadb.Client({ secret: res.secret, domain })
->>>>>>> 5409b2a01c6363263f9aad0b8c642d96f27d81f4
     })
     .then(() => loggedInClient.query(RateLimitedSillySum))
     .then(() => loggedInClient.query(RateLimitedSillySum))
@@ -137,11 +119,7 @@ it('Rate limiting kicks in if we go over', function() {
   return expect(
     login(adminClient, 'test@test.com', 'testtest')
       .then(res => {
-<<<<<<< HEAD
         loggedInClient = new faunadb.Client({ secret: res.secret, domain: domain })
-=======
-        loggedInClient = new faunadb.Client({ secret: res.secret, domain })
->>>>>>> 5409b2a01c6363263f9aad0b8c642d96f27d81f4
       })
       .then(() => loggedInClient.query(RateLimitedSillySum))
       .then(() => loggedInClient.query(RateLimitedSillySum))
@@ -156,22 +134,14 @@ it('Rate limiting is scoped per user since we added Identity', function() {
   return (
     login(adminClient, 'test@test.com', 'testtest')
       .then(res => {
-<<<<<<< HEAD
         loggedInClient = new faunadb.Client({ secret: res.secret, domain: domain })
-=======
-        loggedInClient = new faunadb.Client({ secret: res.secret, domain })
->>>>>>> 5409b2a01c6363263f9aad0b8c642d96f27d81f4
       })
       .then(() => loggedInClient.query(RateLimitedSillySum))
       .then(() => loggedInClient.query(RateLimitedSillySum))
       // one user hitting rate-limiting doesn't block the other one
       .then(() => login(adminClient, 'test2@test.com', 'testtest'))
       .then(res => {
-<<<<<<< HEAD
         loggedInClient = new faunadb.Client({ secret: res.secret, domain: domain })
-=======
-        loggedInClient = new faunadb.Client({ secret: res.secret, domain })
->>>>>>> 5409b2a01c6363263f9aad0b8c642d96f27d81f4
       })
       .then(() => loggedInClient.query(RateLimitedSillySum))
       .then(() => loggedInClient.query(RateLimitedSillySum))
@@ -192,22 +162,14 @@ it('We can rate-limit functions globally (e.g. for register) by providing a cons
   return expect(
     login(adminClient, 'test@test.com', 'testtest')
       .then(res => {
-<<<<<<< HEAD
         loggedInClient = new faunadb.Client({ secret: res.secret, domain: domain })
-=======
-        loggedInClient = new faunadb.Client({ secret: res.secret, domain })
->>>>>>> 5409b2a01c6363263f9aad0b8c642d96f27d81f4
       })
       .then(() => loggedInClient.query(RateLimitedSillySum))
       .then(() => loggedInClient.query(RateLimitedSillySum))
       // logging in with another user won't help!
       .then(() => login(adminClient, 'test2@test.com', 'testtest'))
       .then(res => {
-<<<<<<< HEAD
         loggedInClient = new faunadb.Client({ secret: res.secret, domain: domain })
-=======
-        loggedInClient = new faunadb.Client({ secret: res.secret, domain })
->>>>>>> 5409b2a01c6363263f9aad0b8c642d96f27d81f4
       })
       .then(() => loggedInClient.query(RateLimitedSillySum))
       .then(() => loggedInClient.query(RateLimitedSillySum))
