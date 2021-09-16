@@ -17,6 +17,8 @@ import { CreateHashtags } from './hashtags'
 
 const q = faunadb.query
 const { Index, Get } = q
+// A domain for this database (e.g. 'db.eu.fauna.com' or 'db.us.fauna.com')
+const domain = process.env.REACT_APP_LOCAL___DATABASE_DOMAIN || 'db.fauna.com'
 
 // Empty indexes or indexes with less than 128 are created instantly. However,
 // that does not count for indexes that range over multiple collections. Since it can take a few minutes to come online

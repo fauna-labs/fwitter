@@ -15,6 +15,8 @@ import { follow } from './followers'
 
 const q = faunadb.query
 const { CreateKey, Role } = q
+// A domain for this database (e.g. 'db.eu.fauna.com' or 'db.us.fauna.com')
+const domain = process.env.REACT_APP_LOCAL___DATABASE_DOMAIN || 'db.fauna.com'
 
 let adminClient = null
 let loggedInClient = null // a client made with a secret returned from login

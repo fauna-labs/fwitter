@@ -14,11 +14,14 @@ import { register, login } from './auth'
 
 const q = faunadb.query
 const { Query, CreateKey, Role, CreateRole, Collection, Create, Get, Update, Lambda, Var } = q
+// A domain for this database (e.g. 'db.eu.fauna.com' or 'db.us.fauna.com')
+const domain = process.env.REACT_APP_LOCAL___DATABASE_DOMAIN || 'db.fauna.com'
 
 let client = null
 let misterProtectedRef = null
 const adminSecret = process.env.REACT_APP_TEST__ADMIN_KEY
 const domain = process.env.REACT_APP_TEST__DATABASE_DOMAIN || 'db.fauna.com'
+
 
 beforeAll(async () => {
   try {
