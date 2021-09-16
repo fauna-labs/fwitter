@@ -17,6 +17,8 @@ import { CreateHashtags } from './hashtags'
 
 const q = faunadb.query
 const { Index, Get } = q
+// A domain for this database (e.g. 'db.eu.fauna.com' or 'db.us.fauna.com')
+const domain = process.env.REACT_APP_LOCAL___DATABASE_DOMAIN || 'db.fauna.com'
 
 // Empty indexes or indexes with less than 128 are created instantly. However,
 // that does not count for indexes that range over multiple collections. Since it can take a few minutes to come online
@@ -43,7 +45,8 @@ beforeAll(async () => {
   try {
     // First create database to run this test in.
     adminClient = new faunadb.Client({
-      secret: process.env.REACT_APP_TEST__ADMIN_KEY
+      secret: process.env.REACT_APP_TEST__ADMIN_KEY,
+      domain
     })
     const secret = await handlePromiseError(
       deleteAndCreateDatabase(adminClient, 'search-spec'),
@@ -51,7 +54,8 @@ beforeAll(async () => {
     )
     // Scope key to the new database
     adminClient = new faunadb.Client({
-      secret: secret
+      secret: secret,
+      domain
     })
     // Setup the database for this test
     await handlePromiseError(setupDatabaseSearchSpec(adminClient), 'Setup Database')
@@ -87,7 +91,7 @@ it('We can autocomplete tags and user aliases', function() {
   return (
     login(adminClient, 'test@test.com', 'testtest')
       .then(res => {
-        loggedInClient = new faunadb.Client({ secret: res.secret })
+        loggedInClient = new faunadb.Client({ secret: res.secret, domain })
       })
       // We can search for these users by a part of their alias
       // We only search for lowercase!

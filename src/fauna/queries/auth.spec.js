@@ -14,22 +14,27 @@ import { register, login } from './auth'
 
 const q = faunadb.query
 const { Query, CreateKey, Role, CreateRole, Collection, Create, Get, Update, Lambda, Var } = q
+// A domain for this database (e.g. 'db.eu.fauna.com' or 'db.us.fauna.com')
+const domain = process.env.REACT_APP_LOCAL___DATABASE_DOMAIN || 'db.fauna.com'
 
 let client = null
 let misterProtectedRef = null
+
 
 beforeAll(async () => {
   try {
     // First create database to run this test in.
     const adminClient = new faunadb.Client({
-      secret: process.env.REACT_APP_TEST__ADMIN_KEY
+      secret: process.env.REACT_APP_TEST__ADMIN_KEY,
+      domain
     })
     const secret = await handlePromiseError(
       deleteAndCreateDatabase(adminClient, 'auth-spec'),
       'Creating temporary test database'
     )
     client = new faunadb.Client({
-      secret: secret
+      secret: secret,
+      domain
     })
     // Setup the database for this test.
     await handlePromiseError(setupDatabaseAuthSpec(client), 'Setup Database')
@@ -71,7 +76,7 @@ it('We can now login using the UDF call', function() {
 it('We can only use login/register when we have permissions', function() {
   return client
     .query(CreateKey({ role: Role('powerless') }))
-    .then(key => new faunadb.Client({ secret: key.secret }))
+    .then(key => new faunadb.Client({ secret: key.secret, domain }))
     .then(localClient => register(localClient, 'test@test.com', 'testtest'))
     .catch(err => {
       expect(err).toHaveProperty(['message'], 'permission denied')
@@ -85,7 +90,7 @@ it('The bootstrap role has the right to call login and register', function() {
       // the bootstrap role is named: 'keyrole_calludfs
       .query(CreateKey({ role: Role('keyrole_calludfs') }))
       .then(key => {
-        localClient = new faunadb.Client({ secret: key.secret })
+        localClient = new faunadb.Client({ secret: key.secret, domain })
       })
       .then(() => register(localClient, 'test@test.com', 'testtest'))
       .then(() => login(localClient, 'test@test.com', 'testtest'))
@@ -120,7 +125,7 @@ it('If the functions themselves have no permissions, the call will also fail', f
         })
       )
       .then(() => client.query(CreateKey({ role: Role('keyrole_calludfs') })))
-      .then(key => new faunadb.Client({ secret: key.secret }))
+      .then(key => new faunadb.Client({ secret: key.secret, domain }))
       .then(localClient => register(localClient, 'test@test.com', 'testtest'))
       .catch(err => {
         // the call fails with a different error.
@@ -150,7 +155,7 @@ it('We can access the account once we logged in with the account', function() {
         return login(client, 'test@test.com', 'testtest')
       })
       .then(res => {
-        localClient = new faunadb.Client({ secret: res.secret })
+        localClient = new faunadb.Client({ secret: res.secret, domain })
         return localClient.query(Get(accountRef))
       })
       .then(res => {
@@ -170,7 +175,7 @@ it('We cant access anything besides the account itself', function() {
     register(client, 'test@test.com', 'testtest')
       .then(account => login(client, 'test@test.com', 'testtest'))
       .then(res => {
-        localClient = new faunadb.Client({ secret: res.secret })
+        localClient = new faunadb.Client({ secret: res.secret, domain })
       })
       .then(res => {
         return localClient.query(Get(misterProtectedRef))
@@ -212,7 +217,7 @@ it('We can access entities with the login token', function() {
       .then(() => register(client, 'test@test.com', 'testtest'))
       .then(() => login(client, 'test@test.com', 'testtest'))
       .then(res => {
-        localClient = new faunadb.Client({ secret: res.secret })
+        localClient = new faunadb.Client({ secret: res.secret, domain })
       })
       .then(res => localClient.query(Get(misterProtectedRef)))
       .then(res => {
@@ -257,7 +262,7 @@ it('The default access to accounts can be overridden', function() {
         return login(client, 'test@test.com', 'testtest')
       })
       .then(res => {
-        localClient = new faunadb.Client({ secret: res.secret })
+        localClient = new faunadb.Client({ secret: res.secret, domain })
         // Get will still work
         return localClient.query(Get(accountRef))
       })
