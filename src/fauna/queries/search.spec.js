@@ -38,12 +38,16 @@ function waitForIndexActive(client, indexName) {
 }
 
 let adminClient = null
+const adminSecret = process.env.REACT_APP_TEST__ADMIN_KEY
+const domain = process.env.REACT_APP_TEST__DATABASE_DOMAIN || 'db.fauna.com'
+
 // Setup indexes and collections
 beforeAll(async () => {
   try {
     // First create database to run this test in.
     adminClient = new faunadb.Client({
-      secret: process.env.REACT_APP_TEST__ADMIN_KEY
+      secret: adminSecret,
+      domain: domain,
     })
     const secret = await handlePromiseError(
       deleteAndCreateDatabase(adminClient, 'search-spec'),
@@ -51,7 +55,8 @@ beforeAll(async () => {
     )
     // Scope key to the new database
     adminClient = new faunadb.Client({
-      secret: secret
+      secret: secret,
+      domain: domain,
     })
     // Setup the database for this test
     await handlePromiseError(setupDatabaseSearchSpec(adminClient), 'Setup Database')
@@ -87,7 +92,7 @@ it('We can autocomplete tags and user aliases', function() {
   return (
     login(adminClient, 'test@test.com', 'testtest')
       .then(res => {
-        loggedInClient = new faunadb.Client({ secret: res.secret })
+        loggedInClient = new faunadb.Client({ secret: res.secret, domain: domain })
       })
       // We can search for these users by a part of their alias
       // We only search for lowercase!

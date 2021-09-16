@@ -22,11 +22,16 @@ let loggedInClient2 = null // another client with a different usermade with a se
 let bootstrapClient = null // a client made with a key that we created that assumes the bootstrap role.
 let user1Ref = null
 let user2Ref = null
+
+const adminSecret = process.env.REACT_APP_TEST__ADMIN_KEY
+const domain = process.env.REACT_APP_TEST__DATABASE_DOMAIN || 'db.fauna.com'
+
 beforeAll(async () => {
   try {
     // First create database to run this test in.
     const adminClientParentDb = new faunadb.Client({
-      secret: process.env.REACT_APP_TEST__ADMIN_KEY
+      secret: adminSecret,
+      domain: domain,
     })
     // Create the admin client for the new database to bootstrap things
     const secret = await handlePromiseError(
@@ -34,7 +39,8 @@ beforeAll(async () => {
       'Creating temporary test database'
     )
     adminClient = new faunadb.Client({
-      secret: secret
+      secret: secret,
+      domain: domain,
     })
     // Setup the database for this test.
     await handlePromiseError(setupDatabase(adminClient), 'Setup Database')
@@ -43,19 +49,19 @@ beforeAll(async () => {
     // We create a user directly as well
     await handlePromiseError(registerWithUser(adminClient, 'test@test.com', 'testtest'), 'Register with User')
     const res = await handlePromiseError(login(adminClient, 'test@test.com', 'testtest'), 'Login')
-    loggedInClient = new faunadb.Client({ secret: res.secret })
+    loggedInClient = new faunadb.Client({ secret: res.secret, domain: domain })
     user1Ref = res.user.ref
 
     await handlePromiseError(registerWithUser(adminClient, 'test2@test.com', 'testtest'), 'Register with User')
     const res2 = await handlePromiseError(login(adminClient, 'test2@test.com', 'testtest'), 'Login')
-    loggedInClient2 = new faunadb.Client({ secret: res2.secret })
+    loggedInClient2 = new faunadb.Client({ secret: res2.secret, domain: domain })
 
     // Create a client with the bootstrap key (assuming the bootstrap role)
     const key = await handlePromiseError(
       adminClient.query(CreateKey({ role: Role('keyrole_calludfs') })),
       'Creating Bootstrap Key'
     )
-    bootstrapClient = new faunadb.Client({ secret: key.secret })
+    bootstrapClient = new faunadb.Client({ secret: key.secret, domain: domain })
 
     user2Ref = res2.user.ref
     await handlePromiseError(createFweet(loggedInClient, 'Tweet user 1 #tag1', ['tag1']), 'Creating Fweet 1')
