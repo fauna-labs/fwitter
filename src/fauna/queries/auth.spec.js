@@ -17,18 +17,13 @@ const { Query, CreateKey, Role, CreateRole, Collection, Create, Get, Update, Lam
 
 let client = null
 let misterProtectedRef = null
-const adminSecret = process.env.REACT_APP_TEST__ADMIN_KEY
-// A domain for this database (e.g. 'db.eu.fauna.com' or 'db.us.fauna.com')
-const domain = process.env.REACT_APP_TEST__DATABASE_DOMAIN || 'db.fauna.com'
 
+const adminClient = global.faunaAdminClient
+const domain = global.faunaDomain
 
 beforeAll(async () => {
   try {
     // First create database to run this test in.
-    const adminClient = new faunadb.Client({
-      secret: adminSecret,
-      domain: domain,
-    })
     const secret = await handlePromiseError(
       deleteAndCreateDatabase(adminClient, 'auth-spec'),
       'Creating temporary test database'

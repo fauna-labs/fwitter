@@ -26,7 +26,7 @@ const {
   Add,
   Subtract,
   Not,
-  Contains,
+  ContainsPath,
   Abort,
   Now
 } = q
@@ -460,7 +460,7 @@ function GetFweetsWithUsersMapGetGeneric(TweetsSetRefOrArray, depth = 1) {
         {
           fweet: Get(Var('ref')),
           original: If(
-            Contains(['data', 'original'], Var('fweet')),
+            ContainsPath(['data', 'original'], Var('fweet')),
             // refweet, get original fweet's data.
             // We want to get the original as well in the same structure, let's just use recursion
             // to construct that query, we could get the whole refweet chain like this, it looks a bit

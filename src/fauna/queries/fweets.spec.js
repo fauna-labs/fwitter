@@ -23,17 +23,11 @@ let bootstrapClient = null // a client made with a key that we created that assu
 let user1Ref = null
 let user2Ref = null
 
-const adminSecret = process.env.REACT_APP_TEST__ADMIN_KEY
-// A domain for this database (e.g. 'db.eu.fauna.com' or 'db.us.fauna.com')
-const domain = process.env.REACT_APP_TEST__DATABASE_DOMAIN || 'db.fauna.com'
+const adminClientParentDb = global.faunaAdminClient
+const domain = global.faunaDomain
 
 beforeAll(async () => {
   try {
-    // First create database to run this test in.
-    const adminClientParentDb = new faunadb.Client({
-      secret: adminSecret,
-      domain: domain,
-    })
     // Create the admin client for the new database to bootstrap things
     const secret = await handlePromiseError(
       deleteAndCreateDatabase(adminClientParentDb, 'fweets-spec'),
