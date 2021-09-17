@@ -21,6 +21,7 @@ const {
   Get,
   Index,
   CurrentIdentity,
+  Identify,
   Do,
   Delete,
   ContainsStrRegex,

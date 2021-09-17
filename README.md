@@ -31,7 +31,7 @@ To set up the project, go to the [FaunaDB Dashboard](https://dashboard.fauna.com
 
 <img src="readme/sign_up.png?raw=true" width="600">
 
-Once you are in the dashboard, click on New Database, fill in a name, and click Save. 
+Once you are in the dashboard, click on New Database, select Classic for the Region Group, fill in a name, and click Save. 
 <img src="readme/new_database.png?raw=true" width="600">
 
 <img src="readme/new_database2.png?raw=true" width="600">
