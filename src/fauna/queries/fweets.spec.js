@@ -1,6 +1,6 @@
 import faunadb from 'faunadb'
 
-import { setupDatabase, deleteAndCreateDatabase } from '../setup/database'
+import { setupDatabase, createDatabase, deleteDatabase } from '../setup/database'
 
 import { handlePromiseError } from './../helpers/errors'
 import { registerWithUser, login } from './auth'
@@ -23,14 +23,17 @@ let bootstrapClient = null // a client made with a key that we created that assu
 let user1Ref = null
 let user2Ref = null
 
-const adminClientParentDb = global.faunaAdminClient
-const domain = global.faunaDomain
+const adminSecret = process.env.REACT_APP_TEST__ADMIN_KEY
+// A domain for this database (e.g. 'db.eu.fauna.com' or 'db.us.fauna.com')
+const domain = process.env.REACT_APP_TEST__DATABASE_DOMAIN || 'db.fauna.com'
+const childDatabase = `fweets-spec-${global.testTimestamp}`
 
 beforeAll(async () => {
   try {
     // Create the admin client for the new database to bootstrap things
+    let parentClient = new faunadb.Client({ secret: adminSecret, domain: domain })
     const secret = await handlePromiseError(
-      deleteAndCreateDatabase(adminClientParentDb, 'fweets-spec'),
+      createDatabase(parentClient, childDatabase),
       'Creating temporary test database'
     )
     adminClient = new faunadb.Client({
@@ -117,4 +120,17 @@ it('A user that follows another user, sees their fweets and all associated data'
       console.error(err)
       throw err
     })
+}, 60000)
+
+afterAll(async () => {
+  try {
+    // First create database to run this test in.
+    let parentClient = new faunadb.Client({ secret: adminSecret, domain: domain })
+    await handlePromiseError(
+      deleteDatabase(parentClient, childDatabase),
+      'Deleting temporary test database'
+    )
+  } catch (err) {
+    console.error(err)
+  }
 }, 60000)

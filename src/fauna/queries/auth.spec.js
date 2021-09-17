@@ -1,7 +1,7 @@
 import faunadb from 'faunadb'
 
 import { CreateOrUpdateFunction, CreateAccountUDF } from './../setup/functions'
-import { setupProtectedResource, setupDatabaseAuthSpec, deleteAndCreateDatabase } from '../setup/database'
+import { setupProtectedResource, setupDatabaseAuthSpec, createDatabase, deleteDatabase } from '../setup/database'
 import { DeleteAllAccounts } from '../setup/accounts'
 
 import { handlePromiseError, wrapPromiseError } from './../helpers/errors'
@@ -18,16 +18,20 @@ const { Query, CreateKey, Role, CreateRole, Collection, Create, Get, Update, Lam
 let client = null
 let misterProtectedRef = null
 
-const adminClient = global.faunaAdminClient
-const domain = global.faunaDomain
+const adminSecret = process.env.REACT_APP_TEST__ADMIN_KEY
+// A domain for this database (e.g. 'db.eu.fauna.com' or 'db.us.fauna.com')
+const domain = process.env.REACT_APP_TEST__DATABASE_DOMAIN || 'db.fauna.com'
+const childDatabase = `auth-spec-${global.testTimestamp}`
 
 beforeAll(async () => {
   try {
     // First create database to run this test in.
+    let parentClient = new faunadb.Client({ secret: adminSecret, domain: domain })
     const secret = await handlePromiseError(
-      deleteAndCreateDatabase(adminClient, 'auth-spec'),
+      createDatabase(parentClient, childDatabase),
       'Creating temporary test database'
     )
+    
     client = new faunadb.Client({
       secret: secret,
       domain: domain,
@@ -268,4 +272,17 @@ it('The default access to accounts can be overridden', function() {
         return localClient.query(Update(accountRef, { data: { admin: true } }))
       })
   ).rejects.toHaveProperty(['message'], 'permission denied')
+}, 60000)
+
+afterAll(async () => {
+  try {
+    // First create database to run this test in.
+    let parentClient = new faunadb.Client({ secret: adminSecret, domain: domain })
+    await handlePromiseError(
+      deleteDatabase(parentClient, childDatabase),
+      'Deleting temporary test database'
+    )
+  } catch (err) {
+    console.error(err)
+  }
 }, 60000)

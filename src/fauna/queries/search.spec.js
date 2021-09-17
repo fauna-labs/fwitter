@@ -1,6 +1,6 @@
 import faunadb from 'faunadb'
 
-import { deleteAndCreateDatabase, setupDatabaseSearchSpec } from '../setup/database'
+import { createDatabase, deleteDatabase, setupDatabaseSearchSpec } from '../setup/database'
 import { DeleteAllRatelimiting } from '../setup/rate-limiting'
 import { DeleteAllAccounts } from '../setup/accounts'
 import { DeleteAllUsers } from '../setup/users'
@@ -37,15 +37,19 @@ function waitForIndexActive(client, indexName) {
   })
 }
 
-let adminClient = global.faunaAdminClient
-let domain = global.faunaDomain
+const adminSecret = process.env.REACT_APP_TEST__ADMIN_KEY
+// A domain for this database (e.g. 'db.eu.fauna.com' or 'db.us.fauna.com')
+const domain = process.env.REACT_APP_TEST__DATABASE_DOMAIN || 'db.fauna.com'
+let adminClient = null
+const childDatabase = `search-spec-${global.testTimestamp}`
 
 // Setup indexes and collections
 beforeAll(async () => {
   try {
     // First create database to run this test in.
+    let parentClient = new faunadb.Client({ secret: adminSecret, domain: domain })
     const secret = await handlePromiseError(
-      deleteAndCreateDatabase(adminClient, 'search-spec'),
+      createDatabase(parentClient, childDatabase),
       'Creating temporary test database'
     )
     // Scope key to the new database
@@ -136,4 +140,17 @@ it('We can autocomplete tags and user aliases', function() {
         throw err
       })
   )
+}, 60000)
+
+afterAll(async () => {
+  try {
+    // First create database to run this test in.
+    let parentClient = new faunadb.Client({ secret: adminSecret, domain: domain })
+    await handlePromiseError(
+      deleteDatabase(parentClient, childDatabase),
+      'Deleting temporary test database'
+    )
+  } catch (err) {
+    console.error(err)
+  }
 }, 60000)

@@ -60,6 +60,26 @@ async function deleteAndCreateDatabase(client, name) {
   return adminKey.secret
 }
 
+// Simplified versions to support test refactor
+async function createDatabase(client, name) {
+  const database = await handleSetupError(
+    client.query(CreateDatabase({ name: name })),
+    'Create timestamped database'
+  )
+  const adminKey = await handleSetupError(
+    client.query(CreateKey({ database: database.ref, role: 'admin' })),
+    'Create Admin key for db'
+  )
+  return adminKey.secret
+}
+
+async function deleteDatabase(client, name) {
+  const database = await handleSetupError(
+    client.query(Delete(Database(name))),
+    'Delete timestamped database'
+  )
+}
+
 // Setup the database completely, this contains everything necessary to run the application and
 // the most generic things necessary for most tests
 
@@ -188,7 +208,9 @@ async function setupProtectedResource(client) {
 // const DeleteAllFunctions = Map(Paginate(Functions()), Lambda('ref', Delete(Var('ref'))))
 
 export {
+  createDatabase,
   deleteAndCreateDatabase,
+  deleteDatabase,
   setupProtectedResource,
   setupDatabaseRateLimitingSpec,
   setupDatabaseAuthSpec,
