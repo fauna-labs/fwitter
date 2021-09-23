@@ -16,7 +16,8 @@ const handleRegister = (event, username, password, alias, name, sessionContext, 
       sessionContext.dispatch({ type: 'register', data: e })
       history.push('/')
     })
-    .catch(err => {
+   .catch(err => {
+      console.log(err);
       const errorCode = safeVerifyError(err, [
         'requestResult',
         'responseContent',

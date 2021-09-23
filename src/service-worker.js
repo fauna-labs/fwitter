@@ -1,3 +1,7 @@
+// eslint-disable-next-line no-restricted-globals
+const ignored = self.__WB_MANIFEST;
+
+// Your custom service worker code goes here.
 // This optional code is used to register a service worker.
 // register() is not called by default.
 

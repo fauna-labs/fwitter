@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "npm run setup; react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "setup": "node -r esm ./scripts/setup.js local",
