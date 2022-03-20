@@ -55,7 +55,7 @@ const Search = props => {
           'description'
         ])
         if (functionErrorDescription.includes('not unique')) {
-          toast.warn('You are already folllowing this author')
+          toast.warn('You are already following this author')
         } else {
           toast.error('Unknown error')
         }
