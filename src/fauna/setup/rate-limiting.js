@@ -44,21 +44,20 @@ async function createRateLimitingCollection(client) {
 }
 
 async function deleteRateLimitingCollection(client) {
-  await client.query(If(Exists(Collection('rate_limiting')), true, Delete(Collection('rate_limiting'))))
-  await client.query(If(Exists(Index('all_rate_limiting')), true, Delete(Index('all_rate_limiting'))))
+  await client.query(If(Exists(Collection('rate_limiting')),  Delete(Collection('rate_limiting')),true))
+  await client.query(If(Exists(Index('all_rate_limiting')),  Delete(Index('all_rate_limiting')),true))
   await client.query(
     If(
       Exists(Index('rate_limiting_by_action_and_identity')),
-      true,
-      Delete(Index('rate_limiting_by_action_and_identity'))
+      Delete(Index('rate_limiting_by_action_and_identity')),
+        true
     )
   )
 }
 
 const DeleteAllRatelimiting = If(
   Exists(Collection('rate_limiting')),
-  q.Map(Paginate(Documents(Collection('rate_limiting'))), Lambda('ref', Delete(Var('ref')))),
-  true
+  q.Map(Paginate(Documents(Collection('rate_limiting'))), Lambda('ref', Delete(Var('ref')))), true
 )
 
 export { createRateLimitingCollection, deleteRateLimitingCollection, CreateIndexAllRateLimiting, DeleteAllRatelimiting }

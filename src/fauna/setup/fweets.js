@@ -199,19 +199,18 @@ async function createFweetsCollection(client) {
 // If you delete a collection/index you have to wait 60 secs before the
 // names go out of the cache before you reuse them.
 async function deleteFweetsCollection(client) {
-  await client.query(If(Exists(Collection('fweets')), true, Delete(Collection('fweets'))))
-  await client.query(If(Exists(Index('all_fweets')), true, Delete(Index('all_fweets'))))
-  await client.query(If(Exists(Index('fweets_by_author')), true, Delete(Index('fweets_by_author'))))
-  await client.query(If(Exists(Index('fweets_by_tag')), true, Delete(Index('fweets_by_tag'))))
-  await client.query(If(Exists(Index('fweets_by_reference')), true, Delete(Index('fweets_by_reference'))))
-  await client.query(If(Exists(Index('fweets_by_hashtag_ref')), true, Delete(Index('fweets_by_hashtag_ref'))))
+  await client.query(If(Exists(Collection('fweets')), Delete(Collection('fweets')),true))
+  await client.query(If(Exists(Index('all_fweets')), Delete(Index('all_fweets')),true))
+  await client.query(If(Exists(Index('fweets_by_author')),  Delete(Index('fweets_by_author')),true))
+  await client.query(If(Exists(Index('fweets_by_tag')),  Delete(Index('fweets_by_tag')),true))
+  await client.query(If(Exists(Index('fweets_by_reference')), Delete(Index('fweets_by_reference')),true))
+  await client.query(If(Exists(Index('fweets_by_hashtag_ref')),  Delete(Index('fweets_by_hashtag_ref')),true))
 }
 
 // Example of how you could delete all fweets in a collection
 const DeleteAllFweets = If(
   Exists(Collection('fweets')),
-  q.Map(Paginate(Documents(Collection('fweets'))), Lambda('ref', Delete(Var('ref')))),
-  true
+  q.Map(Paginate(Documents(Collection('fweets'))), Lambda('ref', Delete(Var('ref')), true))
 )
 
 export { createFweetsCollection, deleteFweetsCollection, DeleteAllFweets }

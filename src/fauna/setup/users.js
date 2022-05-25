@@ -54,15 +54,15 @@ async function createUsersCollection(client) {
 
 async function deleteUsersCollection(client) {
   await handlePromiseError(
-    client.query(If(Exists(Collection('users')), true, Delete(Collection('users')))),
+    client.query(If(Exists(Collection('users')),  Delete(Collection('users')),true)),
     'Delete users collection'
   )
   await handlePromiseError(
-    client.query(If(Exists(Index('users_by_alias')), true, Delete(Index('users_by_alias')))),
+    client.query(If(Exists(Index('users_by_alias')),  Delete(Index('users_by_alias')),true)),
     'Delete users_by_alias index'
   )
   await handlePromiseError(
-    client.query(If(Exists(Index('all_users')), true, Delete(Index('all_users')))),
+    client.query(If(Exists(Index('all_users')),  Delete(Index('all_users')),true)),
     'Delete all_users index'
   )
 }

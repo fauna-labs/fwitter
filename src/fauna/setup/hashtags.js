@@ -31,14 +31,13 @@ async function createHashtagCollection(client) {
 }
 
 async function deleteHashtagCollection(client) {
-  await client.query(If(Exists(Collection('hashtags')), true, Delete(Collection('hashtags'))))
-  await client.query(If(Exists(Index('hashtags_by_name')), true, Delete(Index('hashtags_by_name'))))
+  await client.query(If(Exists(Collection('hashtags')),  Delete(Collection('hashtags')),true))
+  await client.query(If(Exists(Index('hashtags_by_name')),  Delete(Index('hashtags_by_name')),true))
 }
 
 const DeleteAllHashtags = If(
   Exists(Collection('hashtags')),
-  q.Map(Paginate(Documents(Collection('hashtags'))), Lambda('ref', Delete(Var('ref')))),
-  true
+  q.Map(Paginate(Documents(Collection('hashtags'))), Lambda('ref', Delete(Var('ref')))), true
 )
 
 export { createHashtagCollection, deleteHashtagCollection, DeleteAllHashtags }
