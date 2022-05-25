@@ -39,8 +39,8 @@ async function createCommentsCollection(client) {
 // If you delete a collection/index you have to wait 60 secs before the
 // names go out of the cache before you reuse them.
 async function deleteCommentsCollection(client) {
-  await client.query(If(Exists(Collection('comments')), Delete(Collection('comments')), true))
-  await client.query(If(Exists(Index('comments_by_fweet_ordered')), Delete(Index('comments_by_fweet_ordered')), true))
+  await client.query(If(Exists(Collection('comments')), true, Delete(Collection('comments'))))
+  await client.query(If(Exists(Index('comments_by_fweet_ordered')), true, Delete(Index('comments_by_fweet_ordered'))))
 }
 
 // Example of how you could delete all comments in a collection

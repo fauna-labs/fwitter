@@ -37,13 +37,16 @@ async function createFweetStatsCollection(client) {
 }
 
 async function deleteFweetStatsCollection(client) {
-  await client.query(If(Exists(Collection('fweetstats')),  Delete(Collection('fweetstats')),true))
-  await client.query(If(Exists(Index('fweetstats_by_user_and_fweet')),  Delete(Index('fweetstats_by_user_and_fweet')),true))
+  await client.query(If(Exists(Collection('fweetstats')), true, Delete(Collection('fweetstats'))))
+  await client.query(
+    If(Exists(Index('fweetstats_by_user_and_fweet')), true, Delete(Index('fweetstats_by_user_and_fweet')))
+  )
 }
 
 const DeleteAllFweetStats = If(
   Exists(Collection('fweetstats')),
-  q.Map(Paginate(Documents(Collection('fweetstats'))), Lambda('ref', Delete(Var('ref')))), true
+  q.Map(Paginate(Documents(Collection('fweetstats'))), Lambda('ref', Delete(Var('ref')))),
+  true
 )
 
 export { DeleteAllFweetStats, createFweetStatsCollection, deleteFweetStatsCollection }

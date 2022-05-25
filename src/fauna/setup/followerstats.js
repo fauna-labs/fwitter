@@ -117,16 +117,16 @@ async function createFollowerStatsCollection(client) {
 }
 
 async function deleteFollowerStatsCollection(client) {
-  await client.query(If(Exists(Collection('followerstats')), Delete(Collection('followerstats')),true))
+  await client.query(If(Exists(Collection('followerstats')), true, Delete(Collection('followerstats'))))
   await client.query(
     If(
       Exists(Index('followerstats_by_author_and_follower')),
-      Delete(Index('followerstats_by_author_and_follower')),
-        true
+      true,
+      Delete(Index('followerstats_by_author_and_follower'))
     )
   )
   await client.query(
-    If(Exists(Index('followerstats_by_user_popularity')),  Delete(Index('followerstats_by_user_popularity')),true)
+    If(Exists(Index('followerstats_by_user_popularity')), true, Delete(Index('followerstats_by_user_popularity')))
   )
 }
 
