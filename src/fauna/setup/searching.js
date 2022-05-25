@@ -269,7 +269,7 @@ async function createSearchIndexes(client) {
 
 async function deleteSearchIndexes(client) {
   await client.query(
-    If(Exists(Index('hashtags_and_users_by_wordparts')), true, Delete(Index('hashtags_and_users_by_wordparts')))
+    If(Exists(Index('hashtags_and_users_by_wordparts')), Delete(Index('hashtags_and_users_by_wordparts')), true)
   )
 }
 

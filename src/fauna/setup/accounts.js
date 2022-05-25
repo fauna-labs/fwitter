@@ -51,9 +51,9 @@ async function createAccountCollection(client) {
 }
 
 async function deleteAccountsCollection(client) {
-  await client.query(If(Exists(Collection('accounts')), true, Delete(Collection('accounts'))))
-  await client.query(If(Exists(Index('accounts_by_email')), true, Delete(Index('accounts_by_email'))))
-  await client.query(If(Exists(Index('all_accounts')), true, Delete(Delete('all_accounts'))))
+  await client.query(If(Exists(Collection('accounts')), Delete(Collection('accounts')), true))
+  await client.query(If(Exists(Index('accounts_by_email')), Delete(Index('accounts_by_email')), true))
+  await client.query(If(Exists(Index('all_accounts')), Delete(Delete('all_accounts')), true))
 }
 
 const DeleteAllAccounts = If(
